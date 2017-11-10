@@ -4,11 +4,11 @@
 # In[66]:
 
 from bokeh.io import curdoc, output_file, show, output_notebook
-from bokeh.plotting import figure, ColumnDataSource
+from bokeh.plotting import figure, ColumnDataSource, BoxPlot, Histogram
 from bokeh.models import HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.palettes import Spectral6
-from bkcharts import BoxPlot, Histogram
+# from bkcharts import BoxPlot, Histogram
 
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
