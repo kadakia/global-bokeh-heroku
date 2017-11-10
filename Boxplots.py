@@ -8,7 +8,7 @@ from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.palettes import Spectral6
-from bokeh.charts import BoxPlot, Histogram
+from bkcharts import BoxPlot, Histogram
 
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
