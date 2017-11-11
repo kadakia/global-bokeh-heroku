@@ -83,7 +83,12 @@ print(data.info())
 # Make a slider object
 slider_2 = Slider(start = 1970, end = 1971, step = 1, value = 1970, title = 'Year')
 
-    
+
+box = hv.BoxWhisker(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
+plot_opts = dict(show_legend=False)
+style = dict(color='region')
+box(plot=plot_opts, style=style)
+
 # Define the callback function
 def update_plot(attr, old, new):
     if slider_2.value == 1970:
