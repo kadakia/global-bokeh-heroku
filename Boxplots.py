@@ -19,6 +19,7 @@ hv.extension('bokeh')
 
 # In[83]:
 
+import numpy as np
 import pandas as pd
 
 data = pd.read_csv('gapminder_tidy.csv', index_col = 'Year')
@@ -108,7 +109,7 @@ def update_plot(attr, old, new):
 slider_2.on_change('value', update_plot)
     
     
-layout = row(widgetbox(slider_2), box)
+layout = column(widgetbox(slider_2), box)
 
 curdoc().add_root(layout)
 output_notebook()
