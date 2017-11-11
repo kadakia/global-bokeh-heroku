@@ -125,8 +125,8 @@ p.xaxis.major_label_orientation = pi/2
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
 qmin = groups.quantile(q=0.00)
 qmax = groups.quantile(q=1.00)
-upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
-lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
 # stems
 p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
@@ -184,8 +184,8 @@ def update_plot(attr, old, new):
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
         qmin = groups.quantile(q=0.00)
         qmax = groups.quantile(q=1.00)
-        upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
-        lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+        upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+        lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
         # stems
         p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
@@ -240,8 +240,8 @@ def update_plot(attr, old, new):
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
         qmin = groups.quantile(q=0.00)
         qmax = groups.quantile(q=1.00)
-        upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
-        lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+        upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+        lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
         # stems
         p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
