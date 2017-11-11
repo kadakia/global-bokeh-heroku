@@ -107,7 +107,14 @@ def update_plot(attr, old, new):
     
     # Add title to figure
     box.title.text = 'Boxplots by region, %d' % yr
-    
+
+# Create a dropdown Select widget for the y data
+y_select = Select(
+                  options=['fertility', 'life', 'child_mortality', 'gdp'],
+                  value='life',
+                  title='y-axis data'
+                  )
+
 yr = slider.value
 y = y_select.value
     
@@ -123,13 +130,6 @@ box.yaxis.axis_label = y
 
 # Attach the callback to the 'value' property of slider
 slider.on_change('value', update_plot)
-
-# Create a dropdown Select widget for the y data
-y_select = Select(
-                  options=['fertility', 'life', 'child_mortality', 'gdp'],
-                  value='life',
-                  title='y-axis data'
-                  )
 
 # Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot)
