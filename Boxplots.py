@@ -109,11 +109,11 @@ def update_plot(attr, old, new):
 slider_2.on_change('value', update_plot)
     
     
-layout = column(widgetbox(slider_2), box)
+# layout = column(widgetbox(slider_2), box)
 
-curdoc().add_root(layout)
-output_notebook()
-show(layout)
+curdoc().add_root(box)
+# output_notebook()
+show(box)
 
 
 # Define the callback function
