@@ -11,8 +11,6 @@ from bokeh.palettes import Spectral6
 # from bokeh.charts import BoxPlot, Histogram
 import holoviews as hv
 hv.extension('bokeh')
-import matplotlib.pyplot as plt
-import seaborn as sns
 from bkcharts import BoxPlot
 
 # from bokeh.server.server import Server

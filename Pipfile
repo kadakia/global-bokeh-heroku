@@ -9,8 +9,6 @@ bkcharts = "*"
 pandas = "*"
 numpy = "*"
 pyparsing = "*"
-seaborn = "*"
-matplotlib = "*"
 
 [requires]
 python_version = "3.6"
