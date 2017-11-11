@@ -11,6 +11,8 @@ from bokeh.palettes import Spectral6
 # from bokeh.charts import BoxPlot, Histogram
 import holoviews as hv
 hv.extension('bokeh')
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
@@ -85,35 +87,45 @@ print(data.info())
 slider_2 = Slider(start = 1970, end = 1971, step = 1, value = 1970, title = 'Year')
 
 
-box = hv.BoxWhisker(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
-plot_opts = dict(show_legend=False)
-style = dict(color='region')
-box(plot=plot_opts, style=style)
+# box = plt.plot(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
+# plot_opts = dict(show_legend=False)
+# style = dict(color='region')
+# box(plot=plot_opts, style=style)
+
+box = sns.boxplot(x = 'region', y = 'life', data = data.loc[1970])
+plt.setp(box.get_xticklabels(), rotation=90)
+plt.show()
 
 # Define the callback function
 def update_plot(attr, old, new):
     if slider_2.value == 1970:
     #   box = BoxPlot(data.loc[1970], values = 'life', label='region', color = 'region', legend=False, title='Boxplots by region, 1970')
-        box = hv.BoxWhisker(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
-        plot_opts = dict(show_legend=False)
-        style = dict(color='region')
-        box(plot=plot_opts, style=style)
+    #    box = hv.BoxWhisker(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
+    #    plot_opts = dict(show_legend=False)
+    #    style = dict(color='region')
+    #    box(plot=plot_opts, style=style)
+        box = sns.boxplot(x = 'region', y = 'life', data = data.loc[1970])
+        plt.setp(box.get_xticklabels(), rotation=90)
+        plt.show()
     elif slider_2.value == 1971:
     #   box = BoxPlot(data.loc[1971], values = 'life', label='region', color = 'region', legend=False, title='Boxplots by region, 1971')
-        box = hv.BoxWhisker(data.loc[1971], ['region'], 'life', label = 'Boxplots by region, 1971')
-        plot_opts = dict(show_legend=False)
-        style = dict(color='region')
-        box(plot=plot_opts, style=style)
+    #   box = hv.BoxWhisker(data.loc[1971], ['region'], 'life', label = 'Boxplots by region, 1971')
+    #   plot_opts = dict(show_legend=False)
+    #   style = dict(color='region')
+    #   box(plot=plot_opts, style=style)
+        box = sns.boxplot(x = 'region', y = 'life', data = data.loc[1971])
+        plt.setp(box.get_xticklabels(), rotation=90)
+        plt.show()
 
 # Attach the callback to the 'value' property of slider
 slider_2.on_change('value', update_plot)
     
     
-# layout = column(widgetbox(slider_2), box)
+layout = row(widgetbox(slider_2), box)
 
-curdoc().add_root(box)
+curdoc().add_root(layout)
 # output_notebook()
-show(box)
+show(layout)
 
 
 # Define the callback function
