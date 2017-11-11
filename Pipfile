@@ -4,7 +4,8 @@ verify_ssl = true
 
 [packages]
 bokeh = "*"
-bkcharts = "*"
+holoviews = "*"
+numpy = "*"
 pandas = "*"
 
 [requires]
