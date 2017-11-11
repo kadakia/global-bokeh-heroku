@@ -35,11 +35,11 @@ data_Sou = data[data['region'] == 'South Asia']
 # In[68]:
 
 # Make the ColumnDataSource
-source = ColumnDataSource(data={
-                          'x'      : data.loc[1970].region,
-                          'y'       : data.loc[1970].life,
-                          'country' : data.loc[1970].Country
-                          })
+#source = ColumnDataSource(data={
+#                          'x'      : data.loc[1970].region,
+#                          'y'       : data.loc[1970].life,
+#                          'country' : data.loc[1970].Country
+#                          })
 
 
 # Save the minimum and maximum values of the life expectancy column
@@ -91,13 +91,13 @@ def update_plot(attr, old, new):
     box.xaxis.axis_label = 'region'
     box.yaxis.axis_label = y
 
-    new_data = {
-        'x'       : data.loc[yr][x],
-        'y'       : data.loc[yr][y],
-        'country' : data.loc[yr].Country,
-        'region'  : data.loc[yr].region
-    }
-    source.data = new_data
+#    new_data = {
+#        'x'       : data.loc[yr][x],
+#        'y'       : data.loc[yr][y],
+#        'country' : data.loc[yr].Country,
+#        'region'  : data.loc[yr].region
+#    }
+#    source.data = new_data
 
 # Set the range of all axes
 #    plot.x_range.start = min(data[x])
