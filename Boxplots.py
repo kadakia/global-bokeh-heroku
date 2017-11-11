@@ -119,7 +119,7 @@ yr = slider.value
 y = y_select.value
     
 # Add the color mapper to the circle glyph
-box = hv.BoxWhisker(data.loc[yr], 'region', values = y, source=source, label = 'Boxplots by region, %d' % yr)
+box = hv.BoxWhisker(data.loc[yr], 'region', values = y, label = 'Boxplots by region, %d' % yr)
 
 plot_opts = dict(show_legend=False)
 style = dict(color='region')
