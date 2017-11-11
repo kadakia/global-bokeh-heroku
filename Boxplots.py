@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[82]:
+# In[87]:
 
 from bokeh.io import curdoc, output_file, show, output_notebook
 from bokeh.plotting import figure, ColumnDataSource
@@ -9,9 +9,8 @@ from bokeh.models import HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, S
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.palettes import Spectral6
 # from bokeh.charts import BoxPlot, Histogram
-import holoviews as hv
-hv.extension('bokeh')
-from bkcharts import BoxPlot
+# import holoviews as hv
+# hv.extension('bokeh')
 
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
@@ -20,7 +19,6 @@ from bkcharts import BoxPlot
 
 # In[83]:
 
-import numpy as np
 import pandas as pd
 
 data = pd.read_csv('gapminder_tidy.csv', index_col = 'Year')
@@ -37,7 +35,13 @@ print(data.info())
 # data_Sou = data[data['region'] == 'South Asia']
 
 
-# In[84]:
+# In[121]:
+
+import numpy as np
+from math import pi
+
+
+# In[119]:
 
 # Make the ColumnDataSource
 # source = ColumnDataSource(data={
@@ -79,41 +83,196 @@ print(data.info())
 # output_notebook()
 # show(layout)
 
+# box = sns.boxplot(x = 'region', y = 'life',data = data.loc[1970])
+# plt.setp(box.get_xticklabels(), rotation=90)
+# plt.show()
 
-# In[86]:
+
+# In[122]:
 
 # Make a slider object
-slider_2 = Slider(start = 1970, end = 1971, step = 1, value = 1970, title = 'Year')
+slider_2 = Slider(start = 1970, end = 1980, step = 10, value = 1970, title = 'Year')
 
+# find the quartiles and IQR for each category
+groups = data.loc[1970].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
 
-box = BoxPlot(data.loc[1970], values = 'life', label='region', color = 'region', legend=False, title='Boxplots by region, 1970')
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.life > upper.loc[cat]['life']) | (group.life < lower.loc[cat]['life'])]['life']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in list(data['region'].unique()):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+                
+p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
+p.xaxis.major_label_orientation = pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+
+# stems
+p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
+p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+
+# boxes
+p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
+p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+
+# outliers
+# if not out.empty:
+#     p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p.xgrid.grid_line_color = None
+p.ygrid.grid_line_color = "white"
+p.grid.grid_line_width = 2
+p.xaxis.major_label_text_font_size="10pt"
 
 # Define the callback function
 def update_plot(attr, old, new):
     if slider_2.value == 1970:
-        box = BoxPlot(data.loc[1970], values = 'life', label='region', color = 'region', legend=False, title='Boxplots by region, 1970')
-    #    box = hv.BoxWhisker(data.loc[1970], ['region'], 'life', label = 'Boxplots by region, 1970')
-    #    plot_opts = dict(show_legend=False)
-    #    style = dict(color='region')
-    #    box(plot=plot_opts, style=style)
-    elif slider_2.value == 1971:
-        box = BoxPlot(data.loc[1971], values = 'life', label='region', color = 'region', legend=False, title='Boxplots by region, 1971')
-    #   box = hv.BoxWhisker(data.loc[1971], ['region'], 'life', label = 'Boxplots by region, 1971')
-    #   plot_opts = dict(show_legend=False)
-    #   style = dict(color='region')
-    #   box(plot=plot_opts, style=style)
-    #   box = sns.boxplot(x = 'region', y = 'life', data = data.loc[1971])
-    #   plt.setp(box.get_xticklabels(), rotation=90)
-    #   plt.show()
+        # find the quartiles and IQR for each category
+        groups = data.loc[1970].groupby('region')
+        q1 = groups.quantile(q=0.25)
+        q2 = groups.quantile(q=0.5)
+        q3 = groups.quantile(q=0.75)
+        iqr = q3 - q1
+        upper = q3 + 1.5*iqr
+        lower = q1 - 1.5*iqr
 
+        # find the outliers for each category
+        def outliers(group):
+            cat = group.name
+            return group[(group.life > upper.loc[cat]['life']) | (group.life < lower.loc[cat]['life'])]['life']
+        out = groups.apply(outliers).dropna()
+
+        # prepare outlier data for plotting, we need coordinates for every outlier.
+        if not out.empty:
+            outx = []
+            outy = []
+            for cat in list(data['region'].unique()):
+                # only add outliers if they exist
+                if not out.loc[cat].empty:
+                    for value in out[cat]:
+                        outx.append(cat)
+                        outy.append(value)
+  
+        p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
+        p.xaxis.major_label_orientation = pi/2
+
+        # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+        qmin = groups.quantile(q=0.00)
+        qmax = groups.quantile(q=1.00)
+        upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+        lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+
+        # stems
+        p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
+        p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+
+        # boxes
+        p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+        p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+
+        # whiskers (almost-0 height rects simpler than segments)
+        p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
+        p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+
+        # outliers
+        # if not out.empty:
+        #     p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+        p.xgrid.grid_line_color = None
+        p.ygrid.grid_line_color = "white"
+        p.grid.grid_line_width = 2
+        p.xaxis.major_label_text_font_size="10pt"
+    elif slider_2.value == 1980:
+        # find the quartiles and IQR for each category
+        groups = data.loc[1980].groupby('region')
+        q1 = groups.quantile(q=0.25)
+        q2 = groups.quantile(q=0.5)
+        q3 = groups.quantile(q=0.75)
+        iqr = q3 - q1
+        upper = q3 + 1.5*iqr
+        lower = q1 - 1.5*iqr
+
+        # find the outliers for each category
+        def outliers(group):
+            cat = group.name
+            return group[(group.life > upper.loc[cat]['life']) | (group.life < lower.loc[cat]['life'])]['life']
+        out = groups.apply(outliers).dropna()
+
+        # prepare outlier data for plotting, we need coordinates for every outlier.
+        if not out.empty:
+            outx = []
+            outy = []
+            for cat in list(data['region'].unique()):
+                # only add outliers if they exist
+                if not out.loc[cat].empty:
+                    for value in out[cat]:
+                        outx.append(cat)
+                        outy.append(value)
+  
+        p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
+        p.xaxis.major_label_orientation = pi/2
+
+        # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+        qmin = groups.quantile(q=0.00)
+        qmax = groups.quantile(q=1.00)
+        upper.score = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
+        lower.score = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+
+        # stems
+        p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
+        p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+
+        # boxes
+        p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+        p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+
+        # whiskers (almost-0 height rects simpler than segments)
+        p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
+        p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+
+        # outliers
+        # if not out.empty:
+        #     p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+        p.xgrid.grid_line_color = None
+        p.ygrid.grid_line_color = "white"
+        p.grid.grid_line_width = 2
+        p.xaxis.major_label_text_font_size="10pt"
+        
+    
 # Attach the callback to the 'value' property of slider
 slider_2.on_change('value', update_plot)
     
     
-layout = row(widgetbox(slider_2), box)
+layout = row(widgetbox(slider_2), p)
 
 curdoc().add_root(layout)
-# output_notebook()
+output_notebook()
 show(layout)
 
 
@@ -175,7 +334,7 @@ show(layout)
 # show(layout)
 
 
-# In[49]:
+# In[120]:
 
 # hist_1970 = Histogram(data.loc[1970], values = 'life', color='region', legend='top_left')
 # hist_2000 = Histogram(data.loc[2000], values = 'life', color='region', legend='top_left')
@@ -189,4 +348,5 @@ show(layout)
 # curdoc().add_root(layout)
 # output_notebook()
 # show(layout)
+
 
