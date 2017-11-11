@@ -1,14 +1,13 @@
 
-# coding: utf-8
-
-# In[66]:
-
+import numpy as np
 from bokeh.io import curdoc, output_file, show, output_notebook
 from bokeh.plotting import figure, ColumnDataSource
 from bokeh.models import HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.palettes import Spectral6
-from bkcharts import BoxPlot, Histogram
+# from bkcharts import BoxPlot, Histogram
+import holoviews as hv
+hv.extension('bokeh')
 
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
@@ -113,7 +112,11 @@ yr = slider.value
 y = y_select.value
     
 # Add the color mapper to the circle glyph
-box = BoxPlot(data.loc[yr], values = y, source=source, label='region', color = 'region', legend=False, title = box.title.text)
+box = hv.BoxWhisker(data.loc[yr], 'region', values = y, source=source, label = box.title.text)
+
+plot_opts = dict(show_legend=False)
+style = dict(color='region')
+box(plot=plot_opts, style=style)
 
 box.xaxis.axis_label = 'region'
 box.yaxis.axis_label = y
