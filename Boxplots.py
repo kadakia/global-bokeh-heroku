@@ -648,8 +648,8 @@ qmax = groups.quantile(q=1.00)
 upper.child_mortality = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'child_mortality']),upper.child_mortality)]
 lower.child_mortality = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'child_mortality']),lower.child_mortality)]
 
-# p_mort.y_range.start = -2000
-# p_mort.y_range.end = 160000
+p_mort.y_range.start = 0
+p_mort.y_range.end = 400
 
 # stems
 p_mort.segment(sorted(list(data['region'].unique())), upper.child_mortality, sorted(list(data['region'].unique())), q3.child_mortality, line_color="black")
@@ -712,8 +712,8 @@ qmax = groups.quantile(q=1.00)
 upper.child_mortality = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'child_mortality']),upper.child_mortality)]
 lower.child_mortality = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'child_mortality']),lower.child_mortality)]
 
-# p_mort_2010.y_range.start = -2000
-# p_mort_2010.y_range.end = 160000
+p_mort_2010.y_range.start = 0
+p_mort_2010.y_range.end = 400
 
 # stems
 p_mort_2010.segment(sorted(list(data['region'].unique())), upper.child_mortality, sorted(list(data['region'].unique())), q3.child_mortality, line_color="black")
