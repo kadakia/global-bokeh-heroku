@@ -40,7 +40,7 @@ print(data.info())
 # In[187]:
 
 import numpy as np
-from math import pi
+# from math import pi
 
 
 
@@ -171,7 +171,7 @@ source_2 = ColumnDataSource(data={
 
     
 p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1970", x_range=sorted(list(data['region'].unique())))
-p.xaxis.major_label_orientation = pi/2
+p.xaxis.major_label_orientation = np.pi/2
 
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
 qmin = groups.quantile(q=0.00)
