@@ -94,6 +94,8 @@ import numpy as np
 # Make a slider object
 # slider_2 = Slider(start = 1970, end = 1980, step = 10, value = 1970, title = 'Year')
 
+#LIFE EXPECTANCY
+
 # find the quartiles and IQR for each category
 groups = data.loc[1970].groupby('region')
 q1 = groups.quantile(q=0.25)
@@ -227,6 +229,7 @@ p_2010.yaxis.axis_label = 'life'
 #layout = row(widgetbox(slider_2), p)
 
 
+#INTERACTIVE SCATTER
 
 # Make the ColumnDataSource
 source = ColumnDataSource(data={
@@ -345,6 +348,7 @@ y_select.on_change('value', update_plot_2)
 # show(layout)
 #curdoc().add_root(layout)
 
+#FERTILITY
 
 
 # find the quartiles and IQR for each category
@@ -475,7 +479,7 @@ p_fert_2010.xaxis.axis_label = 'region'
 p_fert_2010.yaxis.axis_label = 'fertility'
 
 
-
+#GDP
 
 
 # find the quartiles and IQR for each category
@@ -513,8 +517,8 @@ qmax = groups.quantile(q=1.00)
 upper.gdp = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'gdp']),upper.gdp)]
 lower.gdp = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'gdp']),lower.gdp)]
 
-# p_gdp.y_range.start = 0
-# p_gdp.y_range.end = 9
+# p_gdp.y_range.start = -2000
+# p_gdp.y_range.end = 160000
 
 # stems
 p_gdp.segment(sorted(list(data['region'].unique())), upper.gdp, sorted(list(data['region'].unique())), q3.gdp, line_color="black")
@@ -578,8 +582,8 @@ qmax = groups.quantile(q=1.00)
 upper.gdp = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'gdp']),upper.gdp)]
 lower.gdp = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'gdp']),lower.gdp)]
 
-# p_gdp_2010.y_range.start = 0
-# p_gdp_2010.y_range.end = 9
+# p_gdp_2010.y_range.start = -2000
+# p_gdp_2010.y_range.end = 160000
 
 # stems
 p_gdp_2010.segment(sorted(list(data['region'].unique())), upper.gdp, sorted(list(data['region'].unique())), q3.gdp, line_color="black")
@@ -606,8 +610,141 @@ p_gdp_2010.xaxis.axis_label = 'region'
 p_gdp_2010.yaxis.axis_label = 'gdp per capita'
 
 
+#CHILD MORTALITY
 
 
+# find the quartiles and IQR for each category
+groups = data.loc[1970].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
+
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.child_mortality > upper.loc[cat]['child_mortality']) | (group.child_mortality < lower.loc[cat]['child_mortality'])]['child_mortality']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_mort = figure(background_fill_color="#EFE8E2", title="Child mortality by region, 1970", x_range=sorted(list(data['region'].unique())))
+p_mort.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.child_mortality = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'child_mortality']),upper.child_mortality)]
+lower.child_mortality = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'child_mortality']),lower.child_mortality)]
+
+# p_mort.y_range.start = -2000
+# p_mort.y_range.end = 160000
+
+# stems
+p_mort.segment(sorted(list(data['region'].unique())), upper.child_mortality, sorted(list(data['region'].unique())), q3.child_mortality, line_color="black")
+p_mort.segment(sorted(list(data['region'].unique())), lower.child_mortality, sorted(list(data['region'].unique())), q1.child_mortality, line_color="black")
+
+# boxes
+p_mort.vbar(sorted(list(data['region'].unique())), 0.7, q2.child_mortality, q3.child_mortality, fill_color="#E08E79", line_color="black")
+p_mort.vbar(sorted(list(data['region'].unique())), 0.7, q1.child_mortality, q2.child_mortality, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_mort.rect(sorted(list(data['region'].unique())), lower.child_mortality, 0.2, 0.01, line_color="black")
+p_mort.rect(sorted(list(data['region'].unique())), upper.child_mortality, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_mort.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_mort.xgrid.grid_line_color = None
+p_mort.ygrid.grid_line_color = "white"
+p_mort.grid.grid_line_width = 2
+p_mort.xaxis.major_label_text_font_size="10pt"
+
+p_mort.xaxis.axis_label = 'region'
+p_mort.yaxis.axis_label = 'child_mortality'
+
+
+
+# find the quartiles and IQR for each category
+groups = data.loc[2010].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
+
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.child_mortality > upper.loc[cat]['child_mortality']) | (group.child_mortality < lower.loc[cat]['child_mortality'])]['child_mortality']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_mort_2010 = figure(background_fill_color="#EFE8E2", title="Child mortality by region, 2010", x_range=sorted(list(data['region'].unique())))
+p_mort_2010.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.child_mortality = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'child_mortality']),upper.child_mortality)]
+lower.child_mortality = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'child_mortality']),lower.child_mortality)]
+
+# p_mort_2010.y_range.start = -2000
+# p_mort_2010.y_range.end = 160000
+
+# stems
+p_mort_2010.segment(sorted(list(data['region'].unique())), upper.child_mortality, sorted(list(data['region'].unique())), q3.child_mortality, line_color="black")
+p_mort_2010.segment(sorted(list(data['region'].unique())), lower.child_mortality, sorted(list(data['region'].unique())), q1.child_mortality, line_color="black")
+
+# boxes
+p_mort_2010.vbar(sorted(list(data['region'].unique())), 0.7, q2.child_mortality, q3.child_mortality, fill_color="#E08E79", line_color="black")
+p_mort_2010.vbar(sorted(list(data['region'].unique())), 0.7, q1.child_mortality, q2.child_mortality, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_mort_2010.rect(sorted(list(data['region'].unique())), lower.child_mortality, 0.2, 0.01, line_color="black")
+p_mort_2010.rect(sorted(list(data['region'].unique())), upper.child_mortality, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_mort_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_mort_2010.xgrid.grid_line_color = None
+p_mort_2010.ygrid.grid_line_color = "white"
+p_mort_2010.grid.grid_line_width = 2
+p_mort_2010.xaxis.major_label_text_font_size="10pt"
+
+p_mort_2010.xaxis.axis_label = 'region'
+p_mort_2010.yaxis.axis_label = 'child_mortality'
+
+
+
+
+
+
+#LAYOUT
 
 
 
@@ -619,10 +756,10 @@ tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
 
 tab4 = Panel(child=row(p_gdp,p_gdp_2010), title='Box Plots - GDP Per Capita')
 
-# tab5 = Panel(child=row(p_mort,p_mort_2010), title='Box Plots - Child Mortality')
+tab5 = Panel(child=row(p_mort,p_mort_2010), title='Box Plots - Child Mortality')
 
 
-layout = Tabs(tabs=[tab1, tab2, tab3, tab4])
+layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5])
 
 
 curdoc().add_root(layout)
