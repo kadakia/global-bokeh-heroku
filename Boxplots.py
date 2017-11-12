@@ -382,7 +382,7 @@ qmax = groups.quantile(q=1.00)
 upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
 lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
 
-p_fert.y_range.start = 1
+p_fert.y_range.start = 0
 p_fert.y_range.end = 9
 
 # stems
@@ -399,7 +399,7 @@ p_fert.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.01, l
 
 # outliers
 if not out.empty:
-    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6, source = source)
 
 p_fert.xgrid.grid_line_color = None
 p_fert.ygrid.grid_line_color = "white"
@@ -452,7 +452,7 @@ qmax = groups.quantile(q=1.00)
 upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
 lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
 
-p_fert_2010.y_range.start = 1
+p_fert_2010.y_range.start = 0
 p_fert_2010.y_range.end = 9
 
 # stems
