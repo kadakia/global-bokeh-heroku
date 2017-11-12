@@ -119,7 +119,7 @@ if not out.empty:
                 outx.append(cat)
                 outy.append(value)
                 
-p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
+p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1970", x_range=sorted(list(data['region'].unique())))
 p.xaxis.major_label_orientation = np.pi/2
 
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -181,7 +181,7 @@ def update_plot(attr, old, new):
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
+        p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1970", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -240,7 +240,7 @@ def update_plot(attr, old, new):
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
+        p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1980", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
