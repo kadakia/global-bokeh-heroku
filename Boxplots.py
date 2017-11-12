@@ -164,9 +164,8 @@ lower = q1 - 1.5*iqr
 
 # Make the ColumnDataSource
 source_2 = ColumnDataSource(data={
-                          'x'       : sorted(list(data['region'].unique())),
-                          'y'       : data.loc[1970].life,
-#                          'region'      : data.loc[1970].region
+                          'x'       : data.loc[1970].region,
+                          'y'       : data.loc[1970].life
                           })
 
     
@@ -192,6 +191,15 @@ p.yaxis.axis_label = 'life'
 
 # Make a slider object
 slider_2 = Slider(start = 1970, end = 2010, step = 1, value = 1970, title = 'Year')
+
+# Create a dropdown Select widget for the x data
+x_select = Select(
+                  options=['region'],
+                  value='region',
+                  title='x-axis data'
+                  )
+
+
 
 # Create a dropdown Select widget for the y data
 y_select = Select(
@@ -252,7 +260,7 @@ def update_plot(attr, old, new):
     yr = slider_2.value
     # find the quartiles and IQR for each category
     groups = data.loc[yr].groupby('region')
-#    x = x_select.value
+    x = x_select.value
     y = y_select.value
     
     # Label axes of plot
@@ -260,9 +268,8 @@ def update_plot(attr, old, new):
     p.yaxis.axis_label = y
 
     new_data = {
-#        'x'       : data.loc[yr][x],
-        'y'       : data.loc[yr][y],
-#        'region'  : data.loc[yr].region
+        'x'       : data.loc[yr][x],
+        'y'       : data.loc[yr][y]
     }
     source_2.data = new_data
 
@@ -282,6 +289,9 @@ def update_plot(attr, old, new):
 
 # Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot)
+
+if x_select.value == 'region':
+    x_6 = sorted(list(data['region'].unique()))
 
 
 # find the outliers for each category
@@ -310,16 +320,16 @@ y_select.on_change('value', update_plot)
 #                outy.append(value)
 
 # stems
-p.segment('x', upper_y, 'x', q3_y, line_color="black")
-p.segment('x', lower_y, 'x', q1_y, line_color="black")
+p.segment(x_6, upper_y, x_6, q3_y, line_color="black")
+p.segment(x_6, lower_y, x_6, q1_y, line_color="black")
 
 # boxes
-p.vbar('x', 0.7, q2_y, q3_y, fill_color="#E08E79", line_color="black")
-p.vbar('x', 0.7, q1_y, q2_y, fill_color="#3B8686", line_color="black")
+p.vbar(x_6, 0.7, q2_y, q3_y, fill_color="#E08E79", line_color="black")
+p.vbar(x_6, 0.7, q1_y, q2_y, fill_color="#3B8686", line_color="black")
 
 # whiskers (almost-0 height rects simpler than segments)
-p.rect('x', upper_y, width = 0.2, height = 0.01, line_color="black", source = source_2)
-p.rect('x', lower_y, width = 0.2, height = 0.01, line_color="black")
+p.rect(x_6, upper_y, width = 0.2, height = 0.01, line_color="black", source = source_2)
+p.rect(x_6, lower_y, width = 0.2, height = 0.01, line_color="black")
 
 # outliers
 #if not out.empty:
