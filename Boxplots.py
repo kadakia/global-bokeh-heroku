@@ -30,7 +30,7 @@ print(data.info())
 
 # data_Eur = data[data['region'] == 'Europe & Central Asia']
 # data_Sub = data[data['region'] == 'Sub-Saharan Africa']
-# data_Ame = data[data['region'] == 'America']
+data_Ame = data[data['region'] == 'America']
 # data_Eas = data[data['region'] == 'East Asia & Pacific']
 # data_Mid = data[data['region'] == 'Middle East & North Africa']
 # data_Sou = data[data['region'] == 'South Asia']
@@ -284,6 +284,7 @@ def update_plot_2(attr, old, new):
     yr = slider.value
     x = x_select.value
     y = y_select.value
+    
     # Label axes of plot
     plot.xaxis.axis_label = x
     plot.yaxis.axis_label = y
@@ -292,7 +293,6 @@ def update_plot_2(attr, old, new):
         'x'       : data.loc[yr][x],
         'y'       : data.loc[yr][y],
         'country' : data.loc[yr].Country,
-        #        'pop'     : (data.loc[yr].population / 20000000) + 2,
         'region'  : data.loc[yr].region
     }
     source.data = new_data
@@ -305,6 +305,22 @@ def update_plot_2(attr, old, new):
     
     # Add title to figure
     plot.title.text = 'Gapminder data for %d' % yr
+
+# Create a Button with label 'Update Data'
+button = Button(label='Just America')
+
+# Define an update callback with no arguments: update
+def update():
+    
+    yr = slider.value
+    x = x_select.value
+    y = y_select.value
+    
+    # Update the ColumnDataSource data dictionary
+    source.data = {'x': data_Ame.loc[yr][x], 'y': data_Ame.loc[yr][y], 'country' : data_Ame.loc[yr].Country, 'region'  : data_Ame.loc[yr].region}
+
+# Add the update callback to the button
+button.on_click(update)
 
 # Add the color mapper to the circle glyph
 plot.circle(x='x', y='y', fill_alpha=0.8, source=source,
@@ -673,7 +689,7 @@ p_mort.grid.grid_line_width = 2
 p_mort.xaxis.major_label_text_font_size="10pt"
 
 p_mort.xaxis.axis_label = 'region'
-p_mort.yaxis.axis_label = 'child_mortality'
+p_mort.yaxis.axis_label = 'child mortality'
 
 
 
@@ -737,7 +753,7 @@ p_mort_2010.grid.grid_line_width = 2
 p_mort_2010.xaxis.major_label_text_font_size="10pt"
 
 p_mort_2010.xaxis.axis_label = 'region'
-p_mort_2010.yaxis.axis_label = 'child_mortality'
+p_mort_2010.yaxis.axis_label = 'child mortality'
 
 
 
@@ -748,7 +764,7 @@ p_mort_2010.yaxis.axis_label = 'child_mortality'
 
 
 
-tab1 = Panel(child=row(widgetbox(slider,x_select,y_select), plot), title='Interactive Scatter')
+tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
 tab2 = Panel(child=row(p,p_2010), title='Box Plots - Life Expectancy')
 
