@@ -382,8 +382,8 @@ qmax = groups.quantile(q=1.00)
 upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
 lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
 
-# p_fert.y_range.start = 30
-# p_fert.y_range.end = 90
+p_fert.y_range.start = 1
+p_fert.y_range.end = 9
 
 # stems
 p_fert.segment(sorted(list(data['region'].unique())), upper.fertility, sorted(list(data['region'].unique())), q3.fertility, line_color="black")
@@ -408,6 +408,12 @@ p_fert.xaxis.major_label_text_font_size="10pt"
 
 p_fert.xaxis.axis_label = 'region'
 p_fert.yaxis.axis_label = 'fertility'
+
+# Create a HoverTool
+hover = HoverTool(tooltips = [('Country', '@country')])
+
+# Add the HoverTool to the plot
+p_fert.add_tools(hover)
 
 
 
@@ -446,8 +452,8 @@ qmax = groups.quantile(q=1.00)
 upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
 lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
 
-# p_fert_2010.y_range.start = 30
-# p_fert_2010.y_range.end = 90
+p_fert_2010.y_range.start = 1
+p_fert_2010.y_range.end = 9
 
 # stems
 p_fert_2010.segment(sorted(list(data['region'].unique())), upper.fertility, sorted(list(data['region'].unique())), q3.fertility, line_color="black")
