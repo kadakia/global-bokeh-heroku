@@ -322,12 +322,15 @@ def update():
 # Add the update callback to the button
 button.on_click(update)
 
+
 # Add the color mapper to the circle glyph
 plot.circle(x='x', y='y', fill_alpha=0.8, source=source,
             color=dict(field='region', transform=color_mapper), legend='region')
 
 # Set the legend.location attribute of the plot
 plot.legend.location = 'bottom_left'
+
+plot.legend.click_policy="hide"
 
 # Attach the callback to the 'value' property of slider
 slider.on_change('value',update_plot_2)
