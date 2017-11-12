@@ -29,11 +29,11 @@ print(data.columns)
 print(data.info())
 
 data_Eur = data[data['region'] == 'Europe & Central Asia']
-# data_Sub = data[data['region'] == 'Sub-Saharan Africa']
+data_Sub = data[data['region'] == 'Sub-Saharan Africa']
 data_Ame = data[data['region'] == 'America']
-# data_Eas = data[data['region'] == 'East Asia & Pacific']
-# data_Mid = data[data['region'] == 'Middle East & North Africa']
-# data_Sou = data[data['region'] == 'South Asia']
+data_Eas = data[data['region'] == 'East Asia & Pacific']
+data_Mid = data[data['region'] == 'Middle East & North Africa']
+data_Sou = data[data['region'] == 'South Asia']
 
 
 # In[121]:
@@ -271,6 +271,13 @@ regions_list = data.region.unique().tolist()
 
 # Make a color mapper
 color_mapper = CategoricalColorMapper(factors=regions_list, palette=Spectral6)
+
+plot.circle(x=data_Eur.loc[1970]['fertility'], y=data_Eur.loc[1970]['life'], fill_alpha=0.8,
+            color=dict(field='region', transform=color_mapper), legend='region')
+
+plot.circle(x=data_Ame.loc[1970]['fertility'], y=data_Ame.loc[1970]['fertility'], fill_alpha=0.8,
+            color=dict(field='region', transform=color_mapper), legend='region')
+
 
 # output_file('gapminder_2.html')
 # show(plot)
