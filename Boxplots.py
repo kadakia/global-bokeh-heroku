@@ -129,6 +129,9 @@ qmax = groups.quantile(q=1.00)
 upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
 lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
+p.y_range.start = 40
+p.y_range.end = 90
+
 # stems
 p.segment(sorted(list(data['region'].unique())), upper.life, sorted(list(data['region'].unique())), q3.life, line_color="black")
 p.segment(sorted(list(data['region'].unique())), lower.life, sorted(list(data['region'].unique())), q1.life, line_color="black")
@@ -181,7 +184,7 @@ if not out.empty:
                 outx.append(cat)
                 outy.append(value)
   
-p_2010 = figure(background_fill_color="#EFE8E2", title="Life expectancy by region, 1980", x_range=sorted(list(data['region'].unique())))
+p_2010 = figure(background_fill_color="#EFE8E2", title="Life expectancy by region, 2010", x_range=sorted(list(data['region'].unique())))
 p_2010.xaxis.major_label_orientation = np.pi/2
 
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -189,6 +192,9 @@ qmin = groups.quantile(q=0.00)
 qmax = groups.quantile(q=1.00)
 upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
 lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
+
+p_2010.y_range.start = 40
+p_2010.y_range.end = 90
 
 # stems
 p_2010.segment(sorted(list(data['region'].unique())), upper.life, sorted(list(data['region'].unique())), q3.life, line_color="black")
