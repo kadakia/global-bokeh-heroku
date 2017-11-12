@@ -339,7 +339,7 @@ def update_plot_2(attr, old, new):
     source.data = new_data
 
 # Set the range of all axes
-plot.x_range.start = min(data[x])
+    plot.x_range.start = min(data[x])
     plot.x_range.end = max(data[x])
     plot.y_range.start = min(data[y])
     plot.y_range.end = max(data[y])
