@@ -399,7 +399,7 @@ p_fert.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.01, l
 
 # outliers
 if not out.empty:
-    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6, source = source)
+    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_fert.xgrid.grid_line_color = None
 p_fert.ygrid.grid_line_color = "white"
@@ -409,11 +409,6 @@ p_fert.xaxis.major_label_text_font_size="10pt"
 p_fert.xaxis.axis_label = 'region'
 p_fert.yaxis.axis_label = 'fertility'
 
-# Create a HoverTool
-hover = HoverTool(tooltips = [('Country', '@country')])
-
-# Add the HoverTool to the plot
-p_fert.add_tools(hover)
 
 
 
@@ -483,7 +478,132 @@ p_fert_2010.yaxis.axis_label = 'fertility'
 
 
 
+# find the quartiles and IQR for each category
+groups = data.loc[1970].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
 
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.gdp > upper.loc[cat]['gdp']) | (group.gdp < lower.loc[cat]['gdp'])]['gdp']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_gdp = figure(background_fill_color="#EFE8E2", title="GDP per capita by region, 1970", x_range=sorted(list(data['region'].unique())))
+p_gdp.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.gdp = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'gdp']),upper.gdp)]
+lower.gdp = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'gdp']),lower.gdp)]
+
+# p_gdp.y_range.start = 0
+# p_gdp.y_range.end = 9
+
+# stems
+p_gdp.segment(sorted(list(data['region'].unique())), upper.gdp, sorted(list(data['region'].unique())), q3.gdp, line_color="black")
+p_gdp.segment(sorted(list(data['region'].unique())), lower.gdp, sorted(list(data['region'].unique())), q1.gdp, line_color="black")
+
+# boxes
+p_gdp.vbar(sorted(list(data['region'].unique())), 0.7, q2.gdp, q3.gdp, fill_color="#E08E79", line_color="black")
+p_gdp.vbar(sorted(list(data['region'].unique())), 0.7, q1.gdp, q2.gdp, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_gdp.rect(sorted(list(data['region'].unique())), lower.gdp, 0.2, 0.01, line_color="black")
+p_gdp.rect(sorted(list(data['region'].unique())), upper.gdp, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_gdp.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_gdp.xgrid.grid_line_color = None
+p_gdp.ygrid.grid_line_color = "white"
+p_gdp.grid.grid_line_width = 2
+p_gdp.xaxis.major_label_text_font_size="10pt"
+
+p_gdp.xaxis.axis_label = 'region'
+p_gdp.yaxis.axis_label = 'gdp per capita'
+
+
+
+
+# find the quartiles and IQR for each category
+groups = data.loc[2010].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
+
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.gdp > upper.loc[cat]['gdp']) | (group.gdp < lower.loc[cat]['gdp'])]['gdp']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_gdp_2010 = figure(background_fill_color="#EFE8E2", title="GDP per capita by region, 2010", x_range=sorted(list(data['region'].unique())))
+p_gdp_2010.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.gdp = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'gdp']),upper.gdp)]
+lower.gdp = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'gdp']),lower.gdp)]
+
+# p_gdp_2010.y_range.start = 0
+# p_gdp_2010.y_range.end = 9
+
+# stems
+p_gdp_2010.segment(sorted(list(data['region'].unique())), upper.gdp, sorted(list(data['region'].unique())), q3.gdp, line_color="black")
+p_gdp_2010.segment(sorted(list(data['region'].unique())), lower.gdp, sorted(list(data['region'].unique())), q1.gdp, line_color="black")
+
+# boxes
+p_gdp_2010.vbar(sorted(list(data['region'].unique())), 0.7, q2.gdp, q3.gdp, fill_color="#E08E79", line_color="black")
+p_gdp_2010.vbar(sorted(list(data['region'].unique())), 0.7, q1.gdp, q2.gdp, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_gdp_2010.rect(sorted(list(data['region'].unique())), lower.gdp, 0.2, 0.01, line_color="black")
+p_gdp_2010.rect(sorted(list(data['region'].unique())), upper.gdp, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_gdp_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_gdp_2010.xgrid.grid_line_color = None
+p_gdp_2010.ygrid.grid_line_color = "white"
+p_gdp_2010.grid.grid_line_width = 2
+p_gdp_2010.xaxis.major_label_text_font_size="10pt"
+
+p_gdp_2010.xaxis.axis_label = 'region'
+p_gdp_2010.yaxis.axis_label = 'gdp per capita'
 
 
 
@@ -497,8 +617,12 @@ tab2 = Panel(child=row(p,p_2010), title='Box Plots - Life Expectancy')
 
 tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
 
+tab4 = Panel(child=row(p_gdp,p_gdp_2010), title='Box Plots - GDP Per Capita')
 
-layout = Tabs(tabs=[tab1, tab2, tab3])
+# tab5 = Panel(child=row(p_mort,p_mort_2010), title='Box Plots - Child Mortality')
+
+
+layout = Tabs(tabs=[tab1, tab2, tab3, tab4])
 
 
 curdoc().add_root(layout)
