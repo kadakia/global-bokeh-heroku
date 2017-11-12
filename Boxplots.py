@@ -112,15 +112,15 @@ out = groups.apply(outliers).dropna()
 if not out.empty:
     outx = []
     outy = []
-    for cat in list(data['region'].unique()):
+    for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
         if not out.loc[cat].empty:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
                 
-p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
-p.xaxis.major_label_orientation = pi/2
+p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
+p.xaxis.major_label_orientation = np.pi/2
 
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
 qmin = groups.quantile(q=0.00)
@@ -129,25 +129,28 @@ upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
 lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
 # stems
-p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
-p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+p.segment(sorted(list(data['region'].unique())), upper.life, sorted(list(data['region'].unique())), q3.life, line_color="black")
+p.segment(sorted(list(data['region'].unique())), lower.life, sorted(list(data['region'].unique())), q1.life, line_color="black")
 
 # boxes
-p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
-p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+p.vbar(sorted(list(data['region'].unique())), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+p.vbar(sorted(list(data['region'].unique())), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
 
 # whiskers (almost-0 height rects simpler than segments)
-p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
-p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+p.rect(sorted(list(data['region'].unique())), lower.life, 0.2, 0.01, line_color="black")
+p.rect(sorted(list(data['region'].unique())), upper.life, 0.2, 0.01, line_color="black")
 
 # outliers
-# if not out.empty:
-#     p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+if not out.empty:
+    p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p.xgrid.grid_line_color = None
 p.ygrid.grid_line_color = "white"
 p.grid.grid_line_width = 2
 p.xaxis.major_label_text_font_size="10pt"
+
+p.xaxis.axis_label = 'region'
+p.yaxis.axis_label = 'life'
 
 # Define the callback function
 def update_plot(attr, old, new):
@@ -171,14 +174,14 @@ def update_plot(attr, old, new):
         if not out.empty:
             outx = []
             outy = []
-            for cat in list(data['region'].unique()):
+            for cat in sorted(list(data['region'].unique())):
                 # only add outliers if they exist
                 if not out.loc[cat].empty:
                     for value in out[cat]:
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
+        p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -188,25 +191,28 @@ def update_plot(attr, old, new):
         lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
         # stems
-        p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
-        p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+        p.segment(sorted(list(data['region'].unique())), upper.life, sorted(list(data['region'].unique())), q3.life, line_color="black")
+        p.segment(sorted(list(data['region'].unique())), lower.life, sorted(list(data['region'].unique())), q1.life, line_color="black")
 
         # boxes
-        p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
-        p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+        p.vbar(sorted(list(data['region'].unique())), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+        p.vbar(sorted(list(data['region'].unique())), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
 
         # whiskers (almost-0 height rects simpler than segments)
-        p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
-        p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+        p.rect(sorted(list(data['region'].unique())), lower.life, 0.2, 0.01, line_color="black")
+        p.rect(sorted(list(data['region'].unique())), upper.life, 0.2, 0.01, line_color="black")
 
         # outliers
-        # if not out.empty:
-        #     p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+        if not out.empty:
+            p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
         p.xgrid.grid_line_color = None
         p.ygrid.grid_line_color = "white"
         p.grid.grid_line_width = 2
         p.xaxis.major_label_text_font_size="10pt"
+    
+        p.xaxis.axis_label = 'region'
+        p.yaxis.axis_label = 'life'
     elif slider_2.value == 1980:
         # find the quartiles and IQR for each category
         groups = data.loc[1980].groupby('region')
@@ -227,14 +233,14 @@ def update_plot(attr, old, new):
         if not out.empty:
             outx = []
             outy = []
-            for cat in list(data['region'].unique()):
+            for cat in sorted(list(data['region'].unique())):
                 # only add outliers if they exist
                 if not out.loc[cat].empty:
                     for value in out[cat]:
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="", x_range=list(data['region'].unique()))
+        p = figure(background_fill_color="#EFE8E2", title="", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -244,16 +250,16 @@ def update_plot(attr, old, new):
         lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
         # stems
-        p.segment(list(data['region'].unique()), upper.life, list(data['region'].unique()), q3.life, line_color="black")
-        p.segment(list(data['region'].unique()), lower.life, list(data['region'].unique()), q1.life, line_color="black")
+        p.segment(sorted(list(data['region'].unique())), upper.life, sorted(list(data['region'].unique())), q3.life, line_color="black")
+        p.segment(sorted(list(data['region'].unique())), lower.life, sorted(list(data['region'].unique())), q1.life, line_color="black")
 
         # boxes
-        p.vbar(list(data['region'].unique()), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
-        p.vbar(list(data['region'].unique()), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
+        p.vbar(sorted(list(data['region'].unique())), 0.7, q2.life, q3.life, fill_color="#E08E79", line_color="black")
+        p.vbar(sorted(list(data['region'].unique())), 0.7, q1.life, q2.life, fill_color="#3B8686", line_color="black")
 
         # whiskers (almost-0 height rects simpler than segments)
-        p.rect(list(data['region'].unique()), lower.life, 0.2, 0.01, line_color="black")
-        p.rect(list(data['region'].unique()), upper.life, 0.2, 0.01, line_color="black")
+        p.rect(sorted(list(data['region'].unique())), lower.life, 0.2, 0.01, line_color="black")
+        p.rect(sorted(list(data['region'].unique())), upper.life, 0.2, 0.01, line_color="black")
 
         # outliers
         # if not out.empty:
@@ -263,8 +269,11 @@ def update_plot(attr, old, new):
         p.ygrid.grid_line_color = "white"
         p.grid.grid_line_width = 2
         p.xaxis.major_label_text_font_size="10pt"
-        
-    
+
+        p.xaxis.axis_label = 'region'
+        p.yaxis.axis_label = 'life'
+
+
 # Attach the callback to the 'value' property of slider
 slider_2.on_change('value', update_plot)
 
