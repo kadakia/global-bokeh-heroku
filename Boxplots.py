@@ -129,7 +129,7 @@ qmax = groups.quantile(q=1.00)
 upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
 lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
-p.y_range.start = 40
+p.y_range.start = 30
 p.y_range.end = 90
 
 # stems
@@ -193,7 +193,7 @@ qmax = groups.quantile(q=1.00)
 upper.life = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'life']),upper.life)]
 lower.life = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'life']),lower.life)]
 
-p_2010.y_range.start = 40
+p_2010.y_range.start = 30
 p_2010.y_range.end = 90
 
 # stems
@@ -346,12 +346,153 @@ y_select.on_change('value', update_plot_2)
 #curdoc().add_root(layout)
 
 
+
+# find the quartiles and IQR for each category
+groups = data.loc[1970].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
+
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.fertility > upper.loc[cat]['fertility']) | (group.fertility < lower.loc[cat]['fertility'])]['fertility']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_fert = figure(background_fill_color="#EFE8E2", title="Fertility by region, 1970", x_range=sorted(list(data['region'].unique())))
+p_fert.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
+lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
+
+# p_fert.y_range.start = 30
+# p_fert.y_range.end = 90
+
+# stems
+p_fert.segment(sorted(list(data['region'].unique())), upper.fertility, sorted(list(data['region'].unique())), q3.fertility, line_color="black")
+p_fert.segment(sorted(list(data['region'].unique())), lower.fertility, sorted(list(data['region'].unique())), q1.fertility, line_color="black")
+
+# boxes
+p_fert.vbar(sorted(list(data['region'].unique())), 0.7, q2.fertility, q3.fertility, fill_color="#E08E79", line_color="black")
+p_fert.vbar(sorted(list(data['region'].unique())), 0.7, q1.fertility, q2.fertility, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_fert.rect(sorted(list(data['region'].unique())), lower.fertility, 0.2, 0.01, line_color="black")
+p_fert.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_fert.xgrid.grid_line_color = None
+p_fert.ygrid.grid_line_color = "white"
+p_fert.grid.grid_line_width = 2
+p_fert.xaxis.major_label_text_font_size="10pt"
+
+p_fert.xaxis.axis_label = 'region'
+p_fert.yaxis.axis_label = 'fertility'
+
+
+
+# find the quartiles and IQR for each category
+groups = data.loc[2010].groupby('region')
+q1 = groups.quantile(q=0.25)
+q2 = groups.quantile(q=0.5)
+q3 = groups.quantile(q=0.75)
+iqr = q3 - q1
+upper = q3 + 1.5*iqr
+lower = q1 - 1.5*iqr
+
+# find the outliers for each category
+def outliers(group):
+    cat = group.name
+    return group[(group.fertility > upper.loc[cat]['fertility']) | (group.fertility < lower.loc[cat]['fertility'])]['fertility']
+out = groups.apply(outliers).dropna()
+
+# prepare outlier data for plotting, we need coordinates for every outlier.
+if not out.empty:
+    outx = []
+    outy = []
+    for cat in sorted(list(data['region'].unique())):
+        # only add outliers if they exist
+        if not out.loc[cat].empty:
+            for value in out[cat]:
+                outx.append(cat)
+                outy.append(value)
+
+p_fert_2010 = figure(background_fill_color="#EFE8E2", title="Fertility by region, 2010", x_range=sorted(list(data['region'].unique())))
+p_fert_2010.xaxis.major_label_orientation = np.pi/2
+
+# if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
+qmin = groups.quantile(q=0.00)
+qmax = groups.quantile(q=1.00)
+upper.fertility = [min([x,y]) for (x,y) in zip(list(qmax.loc[:,'fertility']),upper.fertility)]
+lower.fertility = [max([x,y]) for (x,y) in zip(list(qmin.loc[:,'fertility']),lower.fertility)]
+
+# p_fert_2010.y_range.start = 30
+# p_fert_2010.y_range.end = 90
+
+# stems
+p_fert_2010.segment(sorted(list(data['region'].unique())), upper.fertility, sorted(list(data['region'].unique())), q3.fertility, line_color="black")
+p_fert_2010.segment(sorted(list(data['region'].unique())), lower.fertility, sorted(list(data['region'].unique())), q1.fertility, line_color="black")
+
+# boxes
+p_fert_2010.vbar(sorted(list(data['region'].unique())), 0.7, q2.fertility, q3.fertility, fill_color="#E08E79", line_color="black")
+p_fert_2010.vbar(sorted(list(data['region'].unique())), 0.7, q1.fertility, q2.fertility, fill_color="#3B8686", line_color="black")
+
+# whiskers (almost-0 height rects simpler than segments)
+p_fert_2010.rect(sorted(list(data['region'].unique())), lower.fertility, 0.2, 0.01, line_color="black")
+p_fert_2010.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.01, line_color="black")
+
+# outliers
+if not out.empty:
+    p_fert_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+
+p_fert_2010.xgrid.grid_line_color = None
+p_fert_2010.ygrid.grid_line_color = "white"
+p_fert_2010.grid.grid_line_width = 2
+p_fert_2010.xaxis.major_label_text_font_size="10pt"
+
+p_fert_2010.xaxis.axis_label = 'region'
+p_fert_2010.yaxis.axis_label = 'fertility'
+
+
+
+
+
+
+
+
+
+
+
+
+
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select), plot), title='Interactive Scatter')
 
 tab2 = Panel(child=row(p,p_2010), title='Box Plots - Life Expectancy')
 
+tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
 
-layout = Tabs(tabs=[tab1, tab2])
+
+layout = Tabs(tabs=[tab1, tab2, tab3])
 
 
 curdoc().add_root(layout)
