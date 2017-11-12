@@ -290,10 +290,8 @@ def update_plot_2(attr, old, new):
     plot.yaxis.axis_label = y
     
     new_data = {
-        'x_Eur'       : data_Eur.loc[yr][x],
-        'y_Eur'       : data_Eur.loc[yr][y],
-        'x_Ame'       : data_Ame.loc[yr][x],
-        'y_Ame'       : data_Ame.loc[yr][y],
+        'x'       : data.loc[yr][x],
+        'y'       : data.loc[yr][y],
         'country' : data.loc[yr].Country,
         'region'  : data.loc[yr].region
     }
@@ -326,9 +324,7 @@ button.on_click(update)
 
 
 # Add the color mapper to the circle glyph
-plot.circle(x='x_Eur', y='y_Eur', fill_alpha=0.8, source=source,
-            color=dict(field='region', transform=color_mapper), legend='region')
-plot.circle(x='x_Ame', y='y_Ame', fill_alpha=0.8, source=source,
+plot.circle(x='x', y='y', fill_alpha=0.8, source=source,
             color=dict(field='region', transform=color_mapper), legend='region')
 
 # Set the legend.location attribute of the plot
