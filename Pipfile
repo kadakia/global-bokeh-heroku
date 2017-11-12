@@ -7,7 +7,6 @@ bokeh = "*"
 pandas = "*"
 numpy = "*"
 pyparsing = "*"
-math = "*"
 
 [requires]
 python_version = "3.6"
