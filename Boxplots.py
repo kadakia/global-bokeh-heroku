@@ -5,7 +5,7 @@
 
 from bokeh.io import curdoc, output_file, show, output_notebook
 from bokeh.plotting import figure, ColumnDataSource
-from bokeh.models import HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
+from bokeh.models import TextInput, HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
 from bokeh.layouts import widgetbox, column, row, gridplot
 from bokeh.palettes import Spectral6
 # from bokeh.charts import BoxPlot, Histogram
@@ -15,6 +15,17 @@ from bokeh.palettes import Spectral6
 # from bokeh.server.server import Server
 # from bokeh.embed import autoload_server
 # from bokeh.client import push_session
+
+
+def my_text_input_handler(attr, old, new):
+    print("Previous label: " + old)
+    print("Updated label: " + new)
+
+text_input = TextInput(value="default", title="Label:")
+text_input.on_change("value", my_text_input_handler)
+
+# output_notebook()
+# show(widgetbox(text_input))
 
 
 # In[83]:
@@ -119,7 +130,7 @@ if not out.empty:
                 outx.append(cat)
                 outy.append(value)
                 
-p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1970", x_range=sorted(list(data['region'].unique())))
+p = figure(background_fill_color="#EFE8E2", title="Life expectancy by region, 1970", x_range=sorted(list(data['region'].unique())))
 p.xaxis.major_label_orientation = np.pi/2
 
 # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -181,7 +192,7 @@ def update_plot(attr, old, new):
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1970", x_range=sorted(list(data['region'].unique())))
+        p = figure(background_fill_color="#EFE8E2", title="Life expectancy by region, 1970", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -240,7 +251,7 @@ def update_plot(attr, old, new):
                         outx.append(cat)
                         outy.append(value)
   
-        p = figure(background_fill_color="#EFE8E2", title="Boxplots by region, 1980", x_range=sorted(list(data['region'].unique())))
+        p = figure(background_fill_color="#EFE8E2", title="Life expectancy by region, 1980", x_range=sorted(list(data['region'].unique())))
         p.xaxis.major_label_orientation = pi/2
 
         # if no outliers, shrink lengths of stems to be no longer than the minimums or maximums
@@ -297,7 +308,7 @@ xmin, xmax = min(data.fertility), max(data.fertility)
 ymin, ymax = min(data.life), max(data.life)
 
 # Create the figure
-plot = figure(title='Gapminder Data for 1970', plot_height=400, plot_width=700,
+plot = figure(title='Gapminder data for 1970', plot_height=400, plot_width=700,
               x_range=(xmin, xmax), y_range=(ymin, ymax))
 
 # Add circle glyphs to the plot
@@ -401,9 +412,11 @@ y_select.on_change('value', update_plot_2)
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(widgetbox(slider_2), p), title='Box Plots')
+tab2 = Panel(child=row(widgetbox(slider_2), p), title='Box Plots - Life Expectancy')
 
-layout = Tabs(tabs=[tab1, tab2])
+tab3 = Panel(child=widgetbox(text_input), title = 'Test')
+
+layout = Tabs(tabs=[tab1, tab2, tab3])
 
 
 curdoc().add_root(layout)
