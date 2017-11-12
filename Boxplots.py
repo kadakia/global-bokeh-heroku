@@ -272,12 +272,6 @@ regions_list = data.region.unique().tolist()
 # Make a color mapper
 color_mapper = CategoricalColorMapper(factors=regions_list, palette=Spectral6)
 
-plot.circle(x=data_Eur.loc[1970]['fertility'], y=data_Eur.loc[1970]['life'], fill_alpha=0.8,
-            color=dict(field='region', transform=color_mapper), legend='region')
-
-plot.circle(x=data_Ame.loc[1970]['fertility'], y=data_Ame.loc[1970]['fertility'], fill_alpha=0.8,
-            color=dict(field='region', transform=color_mapper), legend='region')
-
 
 # output_file('gapminder_2.html')
 # show(plot)
@@ -767,6 +761,35 @@ p_mort_2010.yaxis.axis_label = 'child mortality'
 
 
 
+#LIFE HISTOGRAMS
+
+p_hist = figure(title="Histogram for Life Expectancy, 1970", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[1970]['life'], bins=np.arange(20,90,5))
+
+p_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+            fill_color="#036564", line_color="#033649")
+
+p_hist.xaxis.axis_label = 'Life expectancy'
+p_hist.yaxis.axis_label = 'Number of countries'
+
+p_hist.legend.location = "top_left"
+p_hist.legend.background_fill_color = "darkgrey"
+
+
+p_hist_2010 = figure(title="Histogram for Life Expectancy, 2010", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[2010]['life'], bins=np.arange(20,90,5))
+
+p_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+                 fill_color="#036564", line_color="#033649")
+
+p_hist_2010.xaxis.axis_label = 'Life expectancy'
+p_hist_2010.yaxis.axis_label = 'Number of countries'
+
+
+
+
 
 
 
@@ -776,7 +799,7 @@ p_mort_2010.yaxis.axis_label = 'child mortality'
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(p,p_2010), title='Box Plots - Life Expectancy')
+tab2 = Panel(gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
 tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
 
