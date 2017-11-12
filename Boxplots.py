@@ -799,7 +799,7 @@ p_hist_2010.yaxis.axis_label = 'Number of countries'
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
+tab2 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
 tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
 
