@@ -164,7 +164,7 @@ lower = q1 - 1.5*iqr
 
 # Make the ColumnDataSource
 source_2 = ColumnDataSource(data={
-#                          'x'       : data.loc[1970].fertility,
+                          'x'       : sorted(list(data['region'].unique())),
                           'y'       : data.loc[1970].life,
 #                          'region'      : data.loc[1970].region
                           })
@@ -310,16 +310,16 @@ y_select.on_change('value', update_plot)
 #                outy.append(value)
 
 # stems
-p.segment(sorted(list(data['region'].unique())), upper_y, sorted(list(data['region'].unique())), q3_y, line_color="black")
-p.segment(sorted(list(data['region'].unique())), lower_y, sorted(list(data['region'].unique())), q1_y, line_color="black")
+p.segment('x', upper_y, 'x', q3_y, line_color="black")
+p.segment('x', lower_y, 'x', q1_y, line_color="black")
 
 # boxes
-p.vbar(sorted(list(data['region'].unique())), 0.7, q2_y, q3_y, fill_color="#E08E79", line_color="black")
-p.vbar(sorted(list(data['region'].unique())), 0.7, q1_y, q2_y, fill_color="#3B8686", line_color="black")
+p.vbar('x', 0.7, q2_y, q3_y, fill_color="#E08E79", line_color="black")
+p.vbar('x', 0.7, q1_y, q2_y, fill_color="#3B8686", line_color="black")
 
 # whiskers (almost-0 height rects simpler than segments)
-p.rect(sorted(list(data['region'].unique())), upper_y, width = 0.2, height = 0.01, line_color="black", source = source_2)
-p.rect(sorted(list(data['region'].unique())), lower_y, width = 0.2, height = 0.01, line_color="black")
+p.rect('x', upper_y, width = 0.2, height = 0.01, line_color="black", source = source_2)
+p.rect('x', lower_y, width = 0.2, height = 0.01, line_color="black")
 
 # outliers
 #if not out.empty:
