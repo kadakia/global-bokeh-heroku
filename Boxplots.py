@@ -763,24 +763,24 @@ p_mort_2010.yaxis.axis_label = 'child mortality'
 
 #LIFE HISTOGRAMS
 
-p_hist = figure(title="Life expectancy, 1970", background_fill_color="#E8DDCB")
+p_hist = figure(title="Life expectancy, 1970", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[1970]['life'], bins=np.arange(20,90,5))
 
 p_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#036564", line_color="#033649")
+            fill_color="#3B8686", line_color="#033649")
 
 p_hist.xaxis.axis_label = 'life expectancy'
 p_hist.yaxis.axis_label = 'number of countries'
 
 
 
-p_hist_2010 = figure(title="Life expectancy, 2010", background_fill_color="#E8DDCB")
+p_hist_2010 = figure(title="Life expectancy, 2010", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[2010]['life'], bins=np.arange(20,90,5))
 
 p_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-                 fill_color="#036564", line_color="#033649")
+                 fill_color="#3B8686", line_color="#033649")
 
 p_hist_2010.xaxis.axis_label = 'life expectancy'
 p_hist_2010.yaxis.axis_label = 'number of countries'
@@ -788,24 +788,24 @@ p_hist_2010.yaxis.axis_label = 'number of countries'
 
 #FERTILITY HISTOGRAMS
 
-p_fert_hist = figure(title="Fertility, 1970", background_fill_color="#E8DDCB")
+p_fert_hist = figure(title="Fertility, 1970", background_fill_color="#EFE8E2")
 
-hist, edges = np.histogram(data.loc[1970]['fertility'].dropna(), bins=np.arange(0,10,1))
+hist, edges = np.histogram(data.loc[1970]['fertility'].dropna(), bins=np.arange(0,10,0.5))
 
 p_fert_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#036564", line_color="#033649")
+            fill_color="#3B8686", line_color="#033649")
 
 p_fert_hist.xaxis.axis_label = 'fertility'
 p_fert_hist.yaxis.axis_label = 'number of countries'
 
 
 
-p_fert_hist_2010 = figure(title="Fertility, 2010", background_fill_color="#E8DDCB")
+p_fert_hist_2010 = figure(title="Fertility, 2010", background_fill_color="#EFE8E2")
 
-hist, edges = np.histogram(data.loc[2010]['fertility'].dropna(), bins=np.arange(0,10,1))
+hist, edges = np.histogram(data.loc[2010]['fertility'].dropna(), bins=np.arange(0,10,0.5))
 
 p_fert_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-                 fill_color="#036564", line_color="#033649")
+                 fill_color="#3B8686", line_color="#033649")
 
 p_fert_hist_2010.xaxis.axis_label = 'fertility'
 p_fert_hist_2010.yaxis.axis_label = 'number of countries'
@@ -813,12 +813,12 @@ p_fert_hist_2010.yaxis.axis_label = 'number of countries'
 #GDP HISTOGRAMS
 
 
-p_gdp_hist = figure(title="GDP per capita, 1970", background_fill_color="#E8DDCB")
+p_gdp_hist = figure(title="GDP per capita, 1970", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[1970]['gdp'].dropna(), bins=np.arange(0,160000,5000))
 
 p_gdp_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#036564", line_color="#033649")
+            fill_color="#3B8686", line_color="#033649")
 
 p_gdp_hist.xaxis.axis_label = 'gdp per capita'
 p_gdp_hist.yaxis.axis_label = 'number of countries'
@@ -827,12 +827,12 @@ p_gdp_hist.yaxis.axis_label = 'number of countries'
 
 
 
-p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#E8DDCB")
+p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[2010]['gdp'].dropna(), bins=np.arange(0,160000,5000))
 
 p_gdp_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-                 fill_color="#036564", line_color="#033649")
+                 fill_color="#3B8686", line_color="#033649")
 
 p_gdp_hist_2010.xaxis.axis_label = 'gdp per capita'
 p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
@@ -841,24 +841,24 @@ p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
 #CHILD MORTALITY HISTOGRAMS
 
 
-p_mort_hist = figure(title="Child mortality, 1970", background_fill_color="#E8DDCB")
+p_mort_hist = figure(title="Child mortality, 1970", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[1970]['child_mortality'].dropna(), bins=np.arange(0,500,25))
 
 p_mort_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#036564", line_color="#033649")
+            fill_color="#3B8686", line_color="#033649")
 
 p_mort_hist.xaxis.axis_label = 'child mortality'
 p_mort_hist.yaxis.axis_label = 'number of countries'
 
 
 
-p_mort_hist_2010 = figure(title="Child mortality, 2010", background_fill_color="#E8DDCB")
+p_mort_hist_2010 = figure(title="Child mortality, 2010", background_fill_color="#EFE8E2")
 
 hist, edges = np.histogram(data.loc[2010]['child_mortality'].dropna(), bins=np.arange(0,500,25))
 
 p_mort_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-                 fill_color="#036564", line_color="#033649")
+                 fill_color="#3B8686", line_color="#033649")
 
 p_mort_hist_2010.xaxis.axis_label = 'child mortality'
 p_mort_hist_2010.yaxis.axis_label = 'number of countries'
