@@ -788,6 +788,10 @@ p_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_hist.xaxis.axis_label = 'life expectancy'
 p_hist.yaxis.axis_label = 'number of countries'
 
+p_hist.xgrid.grid_line_color = None
+p_hist.ygrid.grid_line_color = "white"
+p_hist.grid.grid_line_width = 2
+
 
 
 p_hist_2010 = figure(title="Life expectancy, 2010", background_fill_color="#EFE8E2")
@@ -799,6 +803,10 @@ p_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 
 p_hist_2010.xaxis.axis_label = 'life expectancy'
 p_hist_2010.yaxis.axis_label = 'number of countries'
+
+p_hist_2010.xgrid.grid_line_color = None
+p_hist_2010.ygrid.grid_line_color = "white"
+p_hist_2010.grid.grid_line_width = 2
 
 
 #FERTILITY HISTOGRAMS
@@ -813,6 +821,10 @@ p_fert_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_fert_hist.xaxis.axis_label = 'fertility'
 p_fert_hist.yaxis.axis_label = 'number of countries'
 
+p_fert_hist.xgrid.grid_line_color = None
+p_fert_hist.ygrid.grid_line_color = "white"
+p_fert_hist.grid.grid_line_width = 2
+
 
 
 p_fert_hist_2010 = figure(title="Fertility, 2010", background_fill_color="#EFE8E2")
@@ -824,6 +836,10 @@ p_fert_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 
 p_fert_hist_2010.xaxis.axis_label = 'fertility'
 p_fert_hist_2010.yaxis.axis_label = 'number of countries'
+
+p_fert_hist_2010.xgrid.grid_line_color = None
+p_fert_hist_2010.ygrid.grid_line_color = "white"
+p_fert_hist_2010.grid.grid_line_width = 2
 
 #GDP HISTOGRAMS
 
@@ -839,7 +855,9 @@ p_gdp_hist.xaxis.axis_label = 'gdp per capita'
 p_gdp_hist.yaxis.axis_label = 'number of countries'
 
 
-
+p_gdp_hist.xgrid.grid_line_color = None
+p_gdp_hist.ygrid.grid_line_color = "white"
+p_gdp_hist.grid.grid_line_width = 2
 
 
 p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#EFE8E2")
@@ -852,6 +870,9 @@ p_gdp_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_gdp_hist_2010.xaxis.axis_label = 'gdp per capita'
 p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
 
+p_gdp_hist_2010.xgrid.grid_line_color = None
+p_gdp_hist_2010.ygrid.grid_line_color = "white"
+p_gdp_hist_2010.grid.grid_line_width = 2
 
 #CHILD MORTALITY HISTOGRAMS
 
@@ -866,7 +887,9 @@ p_mort_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_mort_hist.xaxis.axis_label = 'child mortality'
 p_mort_hist.yaxis.axis_label = 'number of countries'
 
-
+p_mort_hist.xgrid.grid_line_color = None
+p_mort_hist.ygrid.grid_line_color = "white"
+p_mort_hist.grid.grid_line_width = 2
 
 p_mort_hist_2010 = figure(title="Child mortality, 2010", background_fill_color="#EFE8E2")
 
@@ -878,7 +901,9 @@ p_mort_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_mort_hist_2010.xaxis.axis_label = 'child mortality'
 p_mort_hist_2010.yaxis.axis_label = 'number of countries'
 
-print('hello')
+p_mort_hist_2010.xgrid.grid_line_color = None
+p_mort_hist_2010.ygrid.grid_line_color = "white"
+p_mort_hist_2010.grid.grid_line_width = 2
 
 #LINEAR REGRESSIONS
 
