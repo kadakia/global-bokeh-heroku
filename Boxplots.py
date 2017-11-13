@@ -931,7 +931,6 @@ p_life_lin_reg.yaxis.axis_label = 'life expectancy'
 
 # Make a slider object
 textbox = TextInput(value="United States", title="Country:")
-textbox.on_change("value", my_text_input_handler)
 
 # Define the callback function
 def my_text_input_handler(attr, old, new):
@@ -965,6 +964,8 @@ p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 
 
 p_life_lin_reg.line(x='x', y=[z * np.polyfit('x','y',1)[0] + np.polyfit('x','y',1)[1] for z in 'x'], source=source_3)
+
+textbox.on_change("value", my_text_input_handler)
 
 # Set the legend.location attribute of the plot
 # if y_select.value == 'life' and x_select.value == 'fertility':
