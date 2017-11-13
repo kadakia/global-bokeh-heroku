@@ -962,7 +962,7 @@ def my_text_input_handler(attr, old, new):
     
     ctry = textbox.value
     #x = x_select.value
-    y = y_select.value
+    y = y_select_2.value
     
     # Label axes of plot
     #plot.xaxis.axis_label = x
@@ -999,14 +999,14 @@ hover = HoverTool(tooltips = [('Value', '@y')])
 p_life_lin_reg.add_tools(hover)
 
 # Create a dropdown Select widget for the y data
-y_select = Select(
+y_select_2 = Select(
                   options=['fertility', 'life', 'child_mortality', 'gdp'],
                   value='life',
                   title='y-axis data'
                   )
 
 # Attach the update_plot callback to the 'value' property of y_select
-y_select.on_change('value', my_text_input_handler)
+y_select_2.on_change('value', my_text_input_handler)
 
 # Set the legend.location attribute of the plot
 # if y_select.value == 'life' and x_select.value == 'fertility':
@@ -1033,7 +1033,7 @@ y_select.on_change('value', my_text_input_handler)
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(widgetbox(textbox,y_select),p_life_lin_reg), title='By Country')
+tab2 = Panel(child=row(widgetbox(textbox,y_select_2),p_life_lin_reg), title='By Country')
 
 tab3 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
