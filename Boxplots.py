@@ -328,19 +328,6 @@ button.on_click(update)
 plot.circle(x='x', y='y', fill_alpha=0.8, source=source,
             color=dict(field='region', transform=color_mapper), legend='region')
 
-# Set the legend.location attribute of the plot
-plot.legend.location = 'bottom_left'
-
-plot.legend.click_policy="hide"
-
-# Attach the callback to the 'value' property of slider
-slider.on_change('value',update_plot_2)
-
-# Create a HoverTool
-hover = HoverTool(tooltips = [('Country', '@country')])
-
-# Add the HoverTool to the plot
-plot.add_tools(hover)
 
 # Create a dropdown Select widget for the x data
 x_select = Select(
@@ -361,6 +348,31 @@ y_select = Select(
 
 # Attach the update_plot callback to the 'value' property of y_select
 y_select.on_change('value', update_plot_2)
+
+
+# Set the legend.location attribute of the plot
+if y_select.value == 'life' and x_select.value == 'fertility':
+    plot.legend.location = 'bottom_left'
+elif y_select.value == 'life' and x_select.value == 'gdp':
+    plot.legend.location = 'bottom_right'
+elif y_select.value == 'life' and x_select.value == 'child_mortality':
+    plot.legend.location = 'top_right'
+elif y_select.value == 'fertility':
+    plot.legend.location = 'bottom_left'
+elif y_select.value == 'child_mortality' and x_select.value == 'fertility':
+    plot.legend.location = 'bottom_left'
+
+
+plot.legend.click_policy="hide"
+
+# Attach the callback to the 'value' property of slider
+slider.on_change('value',update_plot_2)
+
+# Create a HoverTool
+hover = HoverTool(tooltips = [('Country', '@country')])
+
+# Add the HoverTool to the plot
+plot.add_tools(hover)
 
 #layout = row(widgetbox(slider,x_select,y_select), plot)
 
@@ -768,7 +780,7 @@ p_hist = figure(title="Life expectancy, 1970", background_fill_color="#EFE8E2")
 hist, edges = np.histogram(data.loc[1970]['life'], bins=np.arange(20,90,5))
 
 p_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#3B8686", line_color="#033649")
+            fill_color="#3B8686", line_color="black")
 
 p_hist.xaxis.axis_label = 'life expectancy'
 p_hist.yaxis.axis_label = 'number of countries'
