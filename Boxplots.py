@@ -156,7 +156,7 @@ p.grid.grid_line_width = 2
 p.xaxis.major_label_text_font_size="10pt"
 
 p.xaxis.axis_label = 'region'
-p.yaxis.axis_label = 'life'
+p.yaxis.axis_label = 'life expectancy'
 
 
 
@@ -220,7 +220,7 @@ p_2010.grid.grid_line_width = 2
 p_2010.xaxis.major_label_text_font_size="10pt"
 
 p_2010.xaxis.axis_label = 'region'
-p_2010.yaxis.axis_label = 'life'
+p_2010.yaxis.axis_label = 'life expectancy'
 
 
 # Attach the callback to the 'value' property of slider
@@ -763,29 +763,105 @@ p_mort_2010.yaxis.axis_label = 'child mortality'
 
 #LIFE HISTOGRAMS
 
-p_hist = figure(title="Histogram for Life Expectancy, 1970", background_fill_color="#E8DDCB")
+p_hist = figure(title="Life expectancy, 1970", background_fill_color="#E8DDCB")
 
 hist, edges = np.histogram(data.loc[1970]['life'], bins=np.arange(20,90,5))
 
 p_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
             fill_color="#036564", line_color="#033649")
 
-p_hist.xaxis.axis_label = 'Life expectancy'
-p_hist.yaxis.axis_label = 'Number of countries'
-
-p_hist.legend.location = "top_left"
-p_hist.legend.background_fill_color = "darkgrey"
+p_hist.xaxis.axis_label = 'life expectancy'
+p_hist.yaxis.axis_label = 'number of countries'
 
 
-p_hist_2010 = figure(title="Histogram for Life Expectancy, 2010", background_fill_color="#E8DDCB")
+
+p_hist_2010 = figure(title="Life expectancy, 2010", background_fill_color="#E8DDCB")
 
 hist, edges = np.histogram(data.loc[2010]['life'], bins=np.arange(20,90,5))
 
 p_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
                  fill_color="#036564", line_color="#033649")
 
-p_hist_2010.xaxis.axis_label = 'Life expectancy'
-p_hist_2010.yaxis.axis_label = 'Number of countries'
+p_hist_2010.xaxis.axis_label = 'life expectancy'
+p_hist_2010.yaxis.axis_label = 'number of countries'
+
+
+#FERTILITY HISTOGRAMS
+
+p_fert_hist = figure(title="Fertility, 1970", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[1970]['fertility'], bins=np.arange(0,10,1))
+
+p_fert_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+            fill_color="#036564", line_color="#033649")
+
+p_fert_hist.xaxis.axis_label = 'fertility'
+p_fert_hist.yaxis.axis_label = 'number of countries'
+
+
+
+p_fert_hist_2010 = figure(title="Fertility, 2010", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[2010]['fertility'], bins=np.arange(0,10,1))
+
+p_fert_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+                 fill_color="#036564", line_color="#033649")
+
+p_fert_hist_2010.xaxis.axis_label = 'fertility'
+p_fert_hist_2010.yaxis.axis_label = 'number of countries'
+
+#GDP HISTOGRAMS
+
+
+p_gdp_hist = figure(title="GDP per capita, 1970", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[1970]['gdp'], bins=np.arange(0,160000,5000))
+
+p_gdp_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+            fill_color="#036564", line_color="#033649")
+
+p_gdp_hist.xaxis.axis_label = 'gdp per capita'
+p_gdp_hist.yaxis.axis_label = 'number of countries'
+
+
+
+
+
+p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[2010]['gdp'], bins=np.arange(0,160000,5000))
+
+p_gdp_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+                 fill_color="#036564", line_color="#033649")
+
+p_gdp_hist_2010.xaxis.axis_label = 'gdp per capita'
+p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
+
+
+#CHILD MORTALITY HISTOGRAMS
+
+
+p_mort_hist = figure(title="Child mortality, 1970", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[1970]['child_mortality'], bins=np.arange(0,500,25))
+
+p_mort_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+            fill_color="#036564", line_color="#033649")
+
+p_mort_hist.xaxis.axis_label = 'child mortality'
+p_mort_hist.yaxis.axis_label = 'number of countries'
+
+
+
+p_mort_hist_2010 = figure(title="Child mortality, 2010", background_fill_color="#E8DDCB")
+
+hist, edges = np.histogram(data.loc[2010]['child_mortality'], bins=np.arange(0,500,25))
+
+p_mort_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+                 fill_color="#036564", line_color="#033649")
+
+p_mort_hist_2010.xaxis.axis_label = 'child mortality'
+p_mort_hist_2010.yaxis.axis_label = 'number of countries'
 
 
 
@@ -801,11 +877,11 @@ tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title=
 
 tab2 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
-tab3 = Panel(child=row(p_fert,p_fert_2010), title='Box Plots - Fertility')
+tab3 = Panel(child=gridplot(p_fert,p_fert_2010,p_fert_hist,p_fert_hist_2010, ncols=2), title='Fertility')
 
-tab4 = Panel(child=row(p_gdp,p_gdp_2010), title='Box Plots - GDP Per Capita')
+tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010, ncols=2), title='GDP Per Capita')
 
-tab5 = Panel(child=row(p_mort,p_mort_2010), title='Box Plots - Child Mortality')
+tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
 
 layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5])
