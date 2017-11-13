@@ -992,12 +992,6 @@ p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 
 textbox.on_change("value", my_text_input_handler)
 
-# Create a HoverTool
-hover = HoverTool(tooltips = [('Value', '@y')])
-
-# Add the HoverTool to the plot
-p_life_lin_reg.add_tools(hover)
-
 # Create a dropdown Select widget for the y data
 y_select_2 = Select(
                   options=['fertility', 'life', 'child_mortality', 'gdp'],
@@ -1007,6 +1001,12 @@ y_select_2 = Select(
 
 # Attach the update_plot callback to the 'value' property of y_select
 y_select_2.on_change('value', my_text_input_handler)
+
+# Create a HoverTool
+hover = HoverTool(tooltips = [('year', '@x'),(y_select_2.value, '@y')])
+
+# Add the HoverTool to the plot
+p_life_lin_reg.add_tools(hover)
 
 # Set the legend.location attribute of the plot
 # if y_select.value == 'life' and x_select.value == 'fertility':
