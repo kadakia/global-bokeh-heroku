@@ -882,23 +882,105 @@ print('hello')
 
 #LINEAR REGRESSIONS
 
-slope_US, intercept_US = np.polyfit(data_US['Year'].values,data_US['life'].values,1)
-slope_Haiti, intercept_Haiti = np.polyfit(data_Haiti['Year'].values,data_Haiti['life'].values,1)
-slope_China, intercept_China = np.polyfit(data_China['Year'].values,data_China['life'].values,1)
+#slope_US, intercept_US = np.polyfit(data_US['Year'].values,data_US['life'].values,1)
+#slope_Haiti, intercept_Haiti = np.polyfit(data_Haiti['Year'].values,data_Haiti['life'].values,1)
+#slope_China, intercept_China = np.polyfit(data_China['Year'].values,data_China['life'].values,1)
 
-p_life_lin_reg = figure(title="Life expectancy by country", plot_width=700, plot_height=400)
+#p_life_lin_reg = figure(title="Life expectancy by country", plot_width=700, plot_height=400)
 
 
-p_life_lin_reg.circle(x = data_US['Year'], y = data_US['life'], legend='US', color = Spectral6[0])
-p_life_lin_reg.circle(x = data_Haiti['Year'], y = data_Haiti['life'], legend='Haiti', color = Spectral6[1])
-p_life_lin_reg.circle(x = data_China['Year'], y = data_China['life'], legend='China', color = Spectral6[2])
+#p_life_lin_reg.circle(x = data_US['Year'], y = data_US['life'], legend='US', color = Spectral6[0])
+#p_life_lin_reg.circle(x = data_Haiti['Year'], y = data_Haiti['life'], legend='Haiti', color = Spectral6[1])
+#p_life_lin_reg.circle(x = data_China['Year'], y = data_China['life'], legend='China', color = Spectral6[2])
 
-p_life_lin_reg.line(x=[1964, 2025], y=[1964 * slope_US + intercept_US, 2025 * slope_US + intercept_US], color = Spectral6[0], legend='US')
-p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_Haiti + intercept_Haiti, 2025 * slope_Haiti + intercept_Haiti], color = Spectral6[1], legend='Haiti')
-p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_China + intercept_China, 2025 * slope_China + intercept_China], color = Spectral6[2], legend='China')
+#p_life_lin_reg.line(x=[1964, 2025], y=[1964 * slope_US + intercept_US, 2025 * slope_US + intercept_US], color = Spectral6[0], legend='US')
+#p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_Haiti + intercept_Haiti, 2025 * slope_Haiti + intercept_Haiti], color = Spectral6[1], legend='Haiti')
+#p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_China + intercept_China, 2025 * slope_China + intercept_China], color = Spectral6[2], legend='China')
 
-p_life_lin_reg.legend.location = "bottom_right"
-p_life_lin_reg.legend.click_policy="hide"
+#p_life_lin_reg.legend.location = "bottom_right"
+#p_life_lin_reg.legend.click_policy="hide"
+
+
+
+
+#REGRESSIONS TEXT INPUT
+
+# Make the ColumnDataSource
+source_3 = ColumnDataSource(data={
+                          'x'       : data[data['Country'] == 'United States'].reset_index()['Year'],
+                          'y'       : data[data['Country'] == 'United States'].reset_index()['life']
+                          #'country'      : data.loc[1970].Country,
+                          #'region'      : data.loc[1970].region
+                          })
+
+# Save the minimum and maximum values of the fertility column
+xmin, xmax = 1964, 2025
+
+# Save the minimum and maximum values of the life expectancy column
+ymin, ymax = min(data.life), max(data.life)
+
+# Create the figure
+p_life_lin_reg = figure(title='Life expectancy for United States', plot_height=400, plot_width=700,
+              x_range=(xmin, xmax), y_range=(ymin, ymax))
+
+# Set the x-axis label
+p_life_lin_reg.xaxis.axis_label ='year'
+
+# Set the y-axis label
+p_life_lin_reg.yaxis.axis_label = 'life expectancy'
+
+# Make a slider object
+textbox = TextInput(value="United States", title="Country:")
+textbox.on_change("value", my_text_input_handler)
+
+# Define the callback function
+def my_text_input_handler(attr, old, new):
+    
+    ctry = textbox.value
+    #x = x_select.value
+    #y = y_select.value
+    
+    # Label axes of plot
+    #plot.xaxis.axis_label = x
+    #plot.yaxis.axis_label = y
+    
+    new_data = {
+        'x'       : data[data['Country'] == ctry].reset_index()['Year'],
+        'y'       : data[data['Country'] == ctry].reset_index()['life']
+    }
+    source_3.data = new_data
+
+    # Set the range of all axes
+    #plot.x_range.start = min(data[x])
+    #plot.x_range.end = max(data[x])
+    #plot.y_range.start = min(data[y])
+    #plot.y_range.end = max(data[y])
+    
+    # Add title to figure
+    p_life_lin_reg.title.text = 'Life expectancy for %s' % ctry
+
+
+# Add the color mapper to the circle glyph
+p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
+
+
+p_life_lin_reg.line(x='x', y=[z * np.polyfit('x','y',1)[0] + np.polyfit('x','y',1)[1] for z in 'x'], source=source_3)
+
+# Set the legend.location attribute of the plot
+# if y_select.value == 'life' and x_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
+# elif y_select.value == 'life' and x_select.value == 'gdp':
+#     plot.legend.location = 'bottom_right'
+# elif y_select.value == 'life' and x_select.value == 'child_mortality':
+#     plot.legend.location = 'top_right'
+# elif y_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
+# elif y_select.value == 'child_mortality' and x_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
+
+#plot.legend.location = 'bottom_left'
+
+#plot.legend.click_policy="hide"
 
 
 
@@ -917,7 +999,7 @@ tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2)
 
 tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
-tab6 = Panel(child=p_life_lin_reg, title='Regressions - BETA')
+tab6 = Panel(child=row(textbox,p_life_lin_reg), title='Regressions - BETA')
 
 
 layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
