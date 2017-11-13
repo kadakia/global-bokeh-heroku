@@ -877,8 +877,7 @@ p_mort_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_mort_hist_2010.xaxis.axis_label = 'child mortality'
 p_mort_hist_2010.yaxis.axis_label = 'number of countries'
 
-print(hello)
-
+print('hello')
 
 #LINEAR REGRESSIONS
 
