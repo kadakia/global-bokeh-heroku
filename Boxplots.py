@@ -36,6 +36,7 @@ data_Mid = data[data['region'] == 'Middle East & North Africa']
 data_Sou = data[data['region'] == 'South Asia']
 data_US = data[data['Country'] == 'United States'].reset_index()
 data_Haiti = data[data['Country'] == 'Haiti'].reset_index()
+data_China = data[data['Country'] == 'China'].reset_index()
 
 # In[121]:
 
@@ -883,17 +884,20 @@ print('hello')
 
 slope_US, intercept_US = np.polyfit(data_US['Year'].values,data_US['life'].values,1)
 slope_Haiti, intercept_Haiti = np.polyfit(data_Haiti['Year'].values,data_Haiti['life'].values,1)
+slope_China, intercept_China = np.polyfit(data_China['Year'].values,data_China['life'].values,1)
 
-p_life_lin_reg = figure(title="Life expectancy", plot_width=700, plot_height=400)
+p_life_lin_reg = figure(title="Life expectancy by country", plot_width=700, plot_height=400)
 
 
 p_life_lin_reg.circle(x = data_US['Year'], y = data_US['life'], legend='US', color = Spectral6[0])
 p_life_lin_reg.circle(x = data_Haiti['Year'], y = data_Haiti['life'], legend='Haiti', color = Spectral6[1])
+p_life_lin_reg.circle(x = data_China['Year'], y = data_China['life'], legend='China', color = Spectral6[2])
 
 p_life_lin_reg.line(x=[1964, 2025], y=[1964 * slope_US + intercept_US, 2025 * slope_US + intercept_US], color = Spectral6[0], legend='US')
 p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_Haiti + intercept_Haiti, 2025 * slope_Haiti + intercept_Haiti], color = Spectral6[1], legend='Haiti')
+p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_China + intercept_China, 2025 * slope_China + intercept_China], color = Spectral6[2], legend='China')
 
-p_life_lin_reg.legend.location = "top_left"
+p_life_lin_reg.legend.location = "bottom_right"
 p_life_lin_reg.legend.click_policy="hide"
 
 
