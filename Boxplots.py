@@ -310,7 +310,7 @@ def update_plot_2(attr, old, new):
     plot.title.text = 'Gapminder data for %d' % yr
 
 # Create a Button with label 'Update Data'
-button = Button(label='Just America')
+button = Button(label='Freeze Frame: America')
 
 # Define an update callback with no arguments: update
 def update():
@@ -992,6 +992,12 @@ p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 
 textbox.on_change("value", my_text_input_handler)
 
+# Create a HoverTool
+hover = HoverTool(tooltips = [('Life expectancy', '@y')])
+
+# Add the HoverTool to the plot
+p_life_lin_reg.add_tools(hover)
+
 # Set the legend.location attribute of the plot
 # if y_select.value == 'life' and x_select.value == 'fertility':
 #     plot.legend.location = 'bottom_left'
@@ -1025,7 +1031,7 @@ tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2)
 
 tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
-tab6 = Panel(child=row(textbox,p_life_lin_reg), title='Regressions - BETA')
+tab6 = Panel(child=row(textbox,p_life_lin_reg), title='By Country')
 
 
 layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
