@@ -963,7 +963,7 @@ def my_text_input_handler(attr, old, new):
 p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 
 
-p_life_lin_reg.line(x='x', y=[z * np.polyfit('x','y',1)[0] + np.polyfit('x','y',1)[1] for z in 'x'], source=source_3)
+#p_life_lin_reg.line(x='x', y=[z * np.polyfit('x','y',1)[0] + np.polyfit('x','y',1)[1] for z in 'x'], source=source_3)
 
 textbox.on_change("value", my_text_input_handler)
 
