@@ -813,29 +813,29 @@ p_fert_hist_2010.yaxis.axis_label = 'number of countries'
 #GDP HISTOGRAMS
 
 
-p_gdp_hist = figure(title="GDP per capita, 1970", background_fill_color="#E8DDCB")
+# p_gdp_hist = figure(title="GDP per capita, 1970", background_fill_color="#E8DDCB")
 
-hist, edges = np.histogram(data.loc[1970]['gdp'], bins=np.arange(0,160000,5000))
+# hist, edges = np.histogram(data.loc[1970]['gdp'], bins=np.arange(0,160000,5000))
 
-p_gdp_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-            fill_color="#036564", line_color="#033649")
+# p_gdp_hist.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+#             fill_color="#036564", line_color="#033649")
 
-p_gdp_hist.xaxis.axis_label = 'gdp per capita'
-p_gdp_hist.yaxis.axis_label = 'number of countries'
-
-
+# p_gdp_hist.xaxis.axis_label = 'gdp per capita'
+# p_gdp_hist.yaxis.axis_label = 'number of countries'
 
 
 
-p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#E8DDCB")
 
-hist, edges = np.histogram(data.loc[2010]['gdp'], bins=np.arange(0,160000,5000))
 
-p_gdp_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
-                 fill_color="#036564", line_color="#033649")
+# p_gdp_hist_2010 = figure(title="GDP per capita, 2010", background_fill_color="#E8DDCB")
 
-p_gdp_hist_2010.xaxis.axis_label = 'gdp per capita'
-p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
+# hist, edges = np.histogram(data.loc[2010]['gdp'], bins=np.arange(0,160000,5000))
+
+# p_gdp_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
+#                  fill_color="#036564", line_color="#033649")
+
+# p_gdp_hist_2010.xaxis.axis_label = 'gdp per capita'
+# p_gdp_hist_2010.yaxis.axis_label = 'number of countries'
 
 
 #CHILD MORTALITY HISTOGRAMS
@@ -879,7 +879,7 @@ tab2 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life
 
 tab3 = Panel(child=gridplot(p_fert,p_fert_2010,p_fert_hist,p_fert_hist_2010, ncols=2), title='Fertility')
 
-tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010, ncols=2), title='GDP Per Capita')
+tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,ncols=2), title='GDP Per Capita')
 
 tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
