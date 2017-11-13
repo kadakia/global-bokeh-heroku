@@ -34,7 +34,8 @@ data_Ame = data[data['region'] == 'America']
 data_Eas = data[data['region'] == 'East Asia & Pacific']
 data_Mid = data[data['region'] == 'Middle East & North Africa']
 data_Sou = data[data['region'] == 'South Asia']
-
+data_US = data[data['Country'] == 'United States'].reset_index()
+data_Haiti = data[data['Country'] == 'Haiti'].reset_index()
 
 # In[121]:
 
@@ -351,17 +352,18 @@ y_select.on_change('value', update_plot_2)
 
 
 # Set the legend.location attribute of the plot
-if y_select.value == 'life' and x_select.value == 'fertility':
-    plot.legend.location = 'bottom_left'
-elif y_select.value == 'life' and x_select.value == 'gdp':
-    plot.legend.location = 'bottom_right'
-elif y_select.value == 'life' and x_select.value == 'child_mortality':
-    plot.legend.location = 'top_right'
-elif y_select.value == 'fertility':
-    plot.legend.location = 'bottom_left'
-elif y_select.value == 'child_mortality' and x_select.value == 'fertility':
-    plot.legend.location = 'bottom_left'
+# if y_select.value == 'life' and x_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
+# elif y_select.value == 'life' and x_select.value == 'gdp':
+#     plot.legend.location = 'bottom_right'
+# elif y_select.value == 'life' and x_select.value == 'child_mortality':
+#     plot.legend.location = 'top_right'
+# elif y_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
+# elif y_select.value == 'child_mortality' and x_select.value == 'fertility':
+#     plot.legend.location = 'bottom_left'
 
+plot.legend.location = 'bottom_left'
 
 plot.legend.click_policy="hide"
 
@@ -875,8 +877,25 @@ p_mort_hist_2010.quad(top=hist, bottom=0, left=edges[:-1], right=edges[1:],
 p_mort_hist_2010.xaxis.axis_label = 'child mortality'
 p_mort_hist_2010.yaxis.axis_label = 'number of countries'
 
+print(hello)
 
 
+#LINEAR REGRESSIONS
+
+slope_US, intercept_US = np.polyfit(data_US['Year'].values,data_US['life'].values,1)
+slope_Haiti, intercept_Haiti = np.polyfit(data_Haiti['Year'].values,data_Haiti['life'].values,1)
+
+p_life_lin_reg = figure(title="Life expectancy", plot_width=700, plot_height=400)
+
+
+p_life_lin_reg.circle(x = data_US['Year'], y = data_US['life'], legend='US', color = Spectral6[0])
+p_life_lin_reg.circle(x = data_Haiti['Year'], y = data_Haiti['life'], legend='Haiti', color = Spectral6[1])
+
+p_life_lin_reg.line(x=[1964, 2025], y=[1964 * slope_US + intercept_US, 2025 * slope_US + intercept_US], color = Spectral6[0], legend='US')
+p_life_lin_reg.line(x=[1964,2025], y=[1964 * slope_Haiti + intercept_Haiti, 2025 * slope_Haiti + intercept_Haiti], color = Spectral6[1], legend='Haiti')
+
+p_life_lin_reg.legend.location = "top_left"
+p_life_lin_reg.legend.click_policy="hide"
 
 
 
@@ -895,8 +914,10 @@ tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2)
 
 tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
+tab6 = Panel(child=p_life_lin_reg, title='Regressions - BETA')
 
-layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5])
+
+layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
 
 
 curdoc().add_root(layout)
