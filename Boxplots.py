@@ -939,20 +939,20 @@ source_3 = ColumnDataSource(data={
                           })
 
 # Save the minimum and maximum values of the fertility column
-xmin, xmax = 1964, 2025
+xmin, xmax = 1962, 2015
 
 # Save the minimum and maximum values of the life expectancy column
 ymin, ymax = min(data.life), max(data.life)
 
 # Create the figure
-p_life_lin_reg = figure(title='Life expectancy for United States', plot_height=400, plot_width=700,
+p_life_lin_reg = figure(title='Gapminder data for United States', plot_height=400, plot_width=700,
               x_range=(xmin, xmax), y_range=(ymin, ymax))
 
 # Set the x-axis label
 p_life_lin_reg.xaxis.axis_label ='year'
 
 # Set the y-axis label
-p_life_lin_reg.yaxis.axis_label = 'life expectancy'
+p_life_lin_reg.yaxis.axis_label = 'life'
 
 # Make a slider object
 textbox = TextInput(value="United States", title="Country:")
@@ -962,26 +962,26 @@ def my_text_input_handler(attr, old, new):
     
     ctry = textbox.value
     #x = x_select.value
-    #y = y_select.value
+    y = y_select.value
     
     # Label axes of plot
     #plot.xaxis.axis_label = x
-    #plot.yaxis.axis_label = y
+    p_life_lin_reg.yaxis.axis_label = y
     
     new_data = {
         'x'       : data[data['Country'] == ctry].reset_index()['Year'],
-        'y'       : data[data['Country'] == ctry].reset_index()['life']
+        'y'       : data[data['Country'] == ctry].reset_index()[y]
     }
     source_3.data = new_data
 
     # Set the range of all axes
     #plot.x_range.start = min(data[x])
     #plot.x_range.end = max(data[x])
-    #plot.y_range.start = min(data[y])
-    #plot.y_range.end = max(data[y])
+    p_life_lin_reg.y_range.start = min(data[y])
+    p_life_lin_reg.y_range.end = max(data[y])
     
     # Add title to figure
-    p_life_lin_reg.title.text = 'Life expectancy for %s' % ctry
+    p_life_lin_reg.title.text = 'Gapminder data for %s' % ctry
 
 
 # Add the color mapper to the circle glyph
@@ -993,10 +993,20 @@ p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 textbox.on_change("value", my_text_input_handler)
 
 # Create a HoverTool
-hover = HoverTool(tooltips = [('Life expectancy', '@y')])
+hover = HoverTool(tooltips = [('Value', '@y')])
 
 # Add the HoverTool to the plot
 p_life_lin_reg.add_tools(hover)
+
+# Create a dropdown Select widget for the y data
+y_select = Select(
+                  options=['fertility', 'life', 'child_mortality', 'gdp'],
+                  value='life',
+                  title='y-axis data'
+                  )
+
+# Attach the update_plot callback to the 'value' property of y_select
+y_select.on_change('value', my_text_input_handler)
 
 # Set the legend.location attribute of the plot
 # if y_select.value == 'life' and x_select.value == 'fertility':
@@ -1023,15 +1033,15 @@ p_life_lin_reg.add_tools(hover)
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
+tab2 = Panel(child=row(widgetbox(textbox,y_select),p_life_lin_reg), title='By Country')
 
-tab3 = Panel(child=gridplot(p_fert,p_fert_2010,p_fert_hist,p_fert_hist_2010, ncols=2), title='Fertility')
+tab3 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
-tab4 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2), title='GDP Per Capita')
+tab4 = Panel(child=gridplot(p_fert,p_fert_2010,p_fert_hist,p_fert_hist_2010, ncols=2), title='Fertility')
 
-tab5 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
+tab5 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2), title='GDP Per Capita')
 
-tab6 = Panel(child=row(textbox,p_life_lin_reg), title='By Country')
+tab6 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
 
 
 layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
