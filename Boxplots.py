@@ -985,7 +985,7 @@ def my_text_input_handler(attr, old, new):
     p_life_lin_reg.y_range.end = max(data[y])
     
     # Add title to figure
-    p_life_lin_reg.title.text = 'Gapminder data for %s and %s' % (ctry,ctry_2)
+    p_life_lin_reg.title.text = 'Gapminder data for %s' % ctry
 
 
 # Add the color mapper to the circle glyph
