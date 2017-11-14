@@ -973,7 +973,7 @@ def my_text_input_handler(attr, old, new):
     
     new_data = {
         'x'       : data[data['Country'] == ctry].reset_index()['Year'],
-        'y'       : data[data['Country'] == ctry].reset_index()[y]
+        'y'       : data[data['Country'] == ctry].reset_index()[y],
         'z'       : data[data['Country'] == ctry_2].reset_index()[y]
     }
     source_3.data = new_data
