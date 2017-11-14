@@ -955,12 +955,15 @@ p_life_lin_reg.xaxis.axis_label ='year'
 p_life_lin_reg.yaxis.axis_label = 'life'
 
 # Make a slider object
-textbox = TextInput(value="United States", title="Country:")
+textbox = TextInput(value="United States", title="Country 1:")
+
+textbox_2 = TextInput(value="China", title="Country 2:")
 
 # Define the callback function
 def my_text_input_handler(attr, old, new):
     
     ctry = textbox.value
+    ctry_2 = textbox_2.value
     #x = x_select.value
     y = y_select_2.value
     
@@ -971,6 +974,7 @@ def my_text_input_handler(attr, old, new):
     new_data = {
         'x'       : data[data['Country'] == ctry].reset_index()['Year'],
         'y'       : data[data['Country'] == ctry].reset_index()[y]
+        'z'       : data[data['Country'] == ctry_2].reset_index()[y]
     }
     source_3.data = new_data
 
@@ -981,16 +985,20 @@ def my_text_input_handler(attr, old, new):
     p_life_lin_reg.y_range.end = max(data[y])
     
     # Add title to figure
-    p_life_lin_reg.title.text = 'Gapminder data for %s' % ctry
+    p_life_lin_reg.title.text = 'Gapminder data for %s and %s' % (ctry,ctry_2)
 
 
 # Add the color mapper to the circle glyph
 p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
 
+p_life_lin_reg.circle(x='x', y='z', fill_alpha=0.8, source=source_3, color = 'red')
+
 
 #p_life_lin_reg.line(x='x', y=[z * np.polyfit('x','y',1)[0] + np.polyfit('x','y',1)[1] for z in 'x'], source=source_3)
 
 textbox.on_change("value", my_text_input_handler)
+
+textbox_2.on_change("value", my_text_input_handler)
 
 # Create a dropdown Select widget for the y data
 y_select_2 = Select(
@@ -1033,7 +1041,7 @@ p_life_lin_reg.add_tools(hover)
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(widgetbox(textbox,y_select_2),p_life_lin_reg), title='By Country')
+tab2 = Panel(child=row(widgetbox(textbox,y_select_2),p_life_lin_reg), title='Head To Head')
 
 tab3 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
