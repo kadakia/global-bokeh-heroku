@@ -1041,7 +1041,7 @@ p_life_lin_reg.add_tools(hover)
 
 tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(widgetbox(textbox,y_select_2),p_life_lin_reg), title='Head To Head')
+tab2 = Panel(child=row(widgetbox(textbox,textbox_2,y_select_2),p_life_lin_reg), title='Head To Head')
 
 tab3 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
 
