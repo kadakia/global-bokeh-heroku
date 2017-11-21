@@ -1011,7 +1011,7 @@ y_select_2 = Select(
 y_select_2.on_change('value', my_text_input_handler)
 
 # Create a HoverTool
-hover = HoverTool(tooltips = [('year', '@x'),(y_select_2.value, '@y')])
+hover = HoverTool(tooltips = [('year', '@x'),('y-value', '@y')])
 
 # Add the HoverTool to the plot
 p_life_lin_reg.add_tools(hover)
@@ -1056,7 +1056,7 @@ layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
 
 
 curdoc().add_root(layout)
-output_notebook()
+#output_notebook()
 show(layout)
 
 
