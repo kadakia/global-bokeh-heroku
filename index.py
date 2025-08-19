@@ -962,7 +962,8 @@ textbox = TextInput(value="United States", title="Country:")
 # Define the callback function
 def my_text_input_handler(attr, old, new):
     
-    ctry = textbox.value
+    ctry_raw = textbox.value
+    ctry = ctry_raw.title()
 #   ctry_2 = textbox_2.value
     #x = x_select.value
     y = y_select_2.value
