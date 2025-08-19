@@ -6,7 +6,6 @@ verify_ssl = true
 bokeh = "*"
 pandas = "*"
 numpy = "*"
-pyparsing = "*"
 
 [requires]
-python_version = "3.6"
+python_version = "3.12"
