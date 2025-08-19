@@ -5,8 +5,12 @@
 
 from bokeh.io import curdoc, output_file, show, output_notebook
 from bokeh.plotting import figure, ColumnDataSource
-from bokeh.models import TextInput, HoverTool, Button, RadioGroup, Toggle, CheckboxGroup, Select, Slider, Panel, Tabs, CategoricalColorMapper
-from bokeh.layouts import widgetbox, column, row, gridplot
+from bokeh.models import (
+    TextInput, HoverTool, Button, RadioGroup,
+    Toggle, CheckboxGroup, Select, Slider,
+    TabPanel, Tabs, CategoricalColorMapper
+)
+from bokeh.layouts import column, row, gridplot
 from bokeh.palettes import Spectral6
 # from bokeh.charts import BoxPlot, Histogram
 # import holoviews as hv
@@ -24,9 +28,9 @@ import pandas as pd
 
 data = pd.read_csv('gapminder_tidy.csv', index_col = 'Year')
 
-print(data['region'].value_counts())
-print(data.columns)
-print(data.info())
+# print(data['region'].value_counts())
+# print(data.columns)
+# print(data.info())
 
 data_Eur = data[data['region'] == 'Europe & Central Asia']
 data_Sub = data[data['region'] == 'Sub-Saharan Africa']
@@ -96,10 +100,12 @@ import numpy as np
 # Make a slider object
 # slider_2 = Slider(start = 1970, end = 1980, step = 10, value = 1970, title = 'Year')
 
+num_cols = ['fertility', 'life', 'population', 'child_mortality', 'gdp']
 #LIFE EXPECTANCY
 
 # find the quartiles and IQR for each category
 groups = data.loc[1970].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -119,7 +125,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -150,7 +156,7 @@ p.rect(sorted(list(data['region'].unique())), upper.life, 0.2, 0.01, line_color=
 
 # outliers
 if not out.empty:
-    p.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p.xgrid.grid_line_color = None
 p.ygrid.grid_line_color = "white"
@@ -164,6 +170,7 @@ p.yaxis.axis_label = 'life expectancy'
 
 # find the quartiles and IQR for each category
 groups = data.loc[2010].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -183,7 +190,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -214,7 +221,7 @@ p_2010.rect(sorted(list(data['region'].unique())), upper.life, 0.2, 0.01, line_c
 
 # outliers
 if not out.empty:
-    p_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_2010.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_2010.xgrid.grid_line_color = None
 p_2010.ygrid.grid_line_color = "white"
@@ -249,7 +256,7 @@ xmin, xmax = min(data.fertility), max(data.fertility)
 ymin, ymax = min(data.life), max(data.life)
 
 # Create the figure
-plot = figure(title='Gapminder data for 1970', plot_height=400, plot_width=700,
+plot = figure(title='Gapminder data for 1970', height=400, width=700,
               x_range=(xmin, xmax), y_range=(ymin, ymax))
 
 # Add circle glyphs to the plot
@@ -327,8 +334,8 @@ button.on_click(update)
 
 
 # Add the color mapper to the circle glyph
-plot.circle(x='x', y='y', fill_alpha=0.8, source=source,
-            color=dict(field='region', transform=color_mapper), legend='region')
+plot.scatter(x='x', y='y', fill_alpha=0.8, source=source,
+            color=dict(field='region', transform=color_mapper), legend_group='region')
 
 
 # Create a dropdown Select widget for the x data
@@ -388,6 +395,7 @@ plot.add_tools(hover)
 
 # find the quartiles and IQR for each category
 groups = data.loc[1970].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -407,7 +415,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -438,7 +446,7 @@ p_fert.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.01, l
 
 # outliers
 if not out.empty:
-    p_fert.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_fert.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_fert.xgrid.grid_line_color = None
 p_fert.ygrid.grid_line_color = "white"
@@ -453,6 +461,7 @@ p_fert.yaxis.axis_label = 'fertility'
 
 # find the quartiles and IQR for each category
 groups = data.loc[2010].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -472,7 +481,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -503,7 +512,7 @@ p_fert_2010.rect(sorted(list(data['region'].unique())), upper.fertility, 0.2, 0.
 
 # outliers
 if not out.empty:
-    p_fert_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_fert_2010.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_fert_2010.xgrid.grid_line_color = None
 p_fert_2010.ygrid.grid_line_color = "white"
@@ -519,6 +528,7 @@ p_fert_2010.yaxis.axis_label = 'fertility'
 
 # find the quartiles and IQR for each category
 groups = data.loc[1970].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -538,7 +548,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -569,7 +579,7 @@ p_gdp.rect(sorted(list(data['region'].unique())), upper.gdp, 0.2, 0.01, line_col
 
 # outliers
 if not out.empty:
-    p_gdp.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_gdp.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_gdp.xgrid.grid_line_color = None
 p_gdp.ygrid.grid_line_color = "white"
@@ -584,6 +594,7 @@ p_gdp.yaxis.axis_label = 'gdp per capita'
 
 # find the quartiles and IQR for each category
 groups = data.loc[2010].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -603,7 +614,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -634,7 +645,7 @@ p_gdp_2010.rect(sorted(list(data['region'].unique())), upper.gdp, 0.2, 0.01, lin
 
 # outliers
 if not out.empty:
-    p_gdp_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_gdp_2010.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_gdp_2010.xgrid.grid_line_color = None
 p_gdp_2010.ygrid.grid_line_color = "white"
@@ -650,6 +661,7 @@ p_gdp_2010.yaxis.axis_label = 'gdp per capita'
 
 # find the quartiles and IQR for each category
 groups = data.loc[1970].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -669,7 +681,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -700,7 +712,7 @@ p_mort.rect(sorted(list(data['region'].unique())), upper.child_mortality, 0.2, 0
 
 # outliers
 if not out.empty:
-    p_mort.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_mort.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_mort.xgrid.grid_line_color = None
 p_mort.ygrid.grid_line_color = "white"
@@ -714,6 +726,7 @@ p_mort.yaxis.axis_label = 'child mortality'
 
 # find the quartiles and IQR for each category
 groups = data.loc[2010].groupby('region')
+groups = groups[num_cols]
 q1 = groups.quantile(q=0.25)
 q2 = groups.quantile(q=0.5)
 q3 = groups.quantile(q=0.75)
@@ -733,7 +746,7 @@ if not out.empty:
     outy = []
     for cat in sorted(list(data['region'].unique())):
         # only add outliers if they exist
-        if not out.loc[cat].empty:
+        if cat in out.index:
             for value in out[cat]:
                 outx.append(cat)
                 outy.append(value)
@@ -764,7 +777,7 @@ p_mort_2010.rect(sorted(list(data['region'].unique())), upper.child_mortality, 0
 
 # outliers
 if not out.empty:
-    p_mort_2010.circle(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
+    p_mort_2010.scatter(outx, outy, size=6, color="#F38630", fill_alpha=0.6)
 
 p_mort_2010.xgrid.grid_line_color = None
 p_mort_2010.ygrid.grid_line_color = "white"
@@ -945,7 +958,7 @@ xmin, xmax = 1962, 2015
 ymin, ymax = min(data.life), max(data.life)
 
 # Create the figure
-p_life_lin_reg = figure(title='Gapminder data for United States', plot_height=400, plot_width=700,
+p_life_lin_reg = figure(title='Gapminder data for United States', height=400, width=700,
               x_range=(xmin, xmax), y_range=(ymin, ymax))
 
 # Set the x-axis label
@@ -990,7 +1003,7 @@ def my_text_input_handler(attr, old, new):
 
 
 # Add the color mapper to the circle glyph
-p_life_lin_reg.circle(x='x', y='y', fill_alpha=0.8, source=source_3)
+p_life_lin_reg.scatter(x='x', y='y', fill_alpha=0.8, source=source_3)
 
 #p_life_lin_reg.circle(x='x', y='z', fill_alpha=0.8, source=source_3, color = 'red')
 
@@ -1040,17 +1053,21 @@ p_life_lin_reg.add_tools(hover)
 
 
 
-tab1 = Panel(child=row(widgetbox(slider,x_select,y_select,button), plot), title='Interactive Scatter')
+tab1 = TabPanel(child=row(column(slider,x_select,y_select,button), plot), title='Interactive Scatter')
 
-tab2 = Panel(child=row(widgetbox(textbox,y_select_2),p_life_lin_reg), title='By Country')
+tab2 = TabPanel(child=row(column(textbox,y_select_2), p_life_lin_reg), title='By Country')
 
-tab3 = Panel(child = gridplot(p,p_2010,p_hist,p_hist_2010, ncols=2), title='Life Expectancy')
+layout = [[p, p_2010], [p_hist, p_hist_2010]]
+tab3 = TabPanel(child = gridplot(layout), title='Life Expectancy')
 
-tab4 = Panel(child=gridplot(p_fert,p_fert_2010,p_fert_hist,p_fert_hist_2010, ncols=2), title='Fertility')
+layout = [[p_fert, p_fert_2010], [p_fert_hist, p_fert_hist_2010]]
+tab4 = TabPanel(child=gridplot(layout), title='Fertility')
 
-tab5 = Panel(child=gridplot(p_gdp,p_gdp_2010,p_gdp_hist,p_gdp_hist_2010,ncols=2), title='GDP Per Capita')
+layout = [[p_gdp, p_gdp_2010], [p_gdp_hist, p_gdp_hist_2010]]
+tab5 = TabPanel(child=gridplot(layout), title='GDP Per Capita')
 
-tab6 = Panel(child=gridplot(p_mort,p_mort_2010,p_mort_hist,p_mort_hist_2010, ncols=2), title='Child Mortality')
+layout = [[p_mort, p_mort_2010], [p_mort_hist, p_mort_hist_2010]]
+tab6 = TabPanel(child=gridplot(layout), title='Child Mortality')
 
 
 layout = Tabs(tabs=[tab1, tab2, tab3, tab4, tab5, tab6])
