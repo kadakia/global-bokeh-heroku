@@ -335,7 +335,7 @@ button.on_click(update)
 
 # Add the color mapper to the circle glyph
 plot.scatter(x='x', y='y', fill_alpha=0.8, source=source,
-            color=dict(field='region', transform=color_mapper), legend_group='region')
+            color=dict(field='region', transform=color_mapper), legend_field='region')
 
 
 # Create a dropdown Select widget for the x data
